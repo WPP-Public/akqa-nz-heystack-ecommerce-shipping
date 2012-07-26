@@ -20,12 +20,12 @@ namespace Heystack\Subsystem\Shipping;
  *
  */
 final class Events
-{    
+{
     /**
      * Indicates that the ShippingHandler's total has been updated
      */
     const TOTAL_UPDATED       = 'shipping.totalupdated';
-    
+
     /**
      * Indicates that the ShippingHandler's information has been stored
      */

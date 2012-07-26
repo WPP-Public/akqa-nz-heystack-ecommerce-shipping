@@ -23,20 +23,19 @@ interface CountryInterface extends \Serializable
      * Returns a unique identifier
      */
     public function getIdentifier();
-    
+
     /**
      * Returns the name of the country object
      */
     public function getName();
-    
+
     /**
      * Returns the country code of the country object
      */
     public function getCountryCode();
-    
+
     /**
      * Returns the cost of shipping to the country in question
      */
     public function getShippingCost();
 }
-

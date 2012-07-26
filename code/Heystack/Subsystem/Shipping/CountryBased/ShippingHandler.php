@@ -36,53 +36,53 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
     use ShippingHandlerTrait;
     use TransactionModifierStateTrait;
     use TransactionModifierSerializeTrait;
-    
+
     /**
      * Holds the key used for storing state
      */
     const STATE_KEY = 'shipping';
-    
+
     /**
      * Holds the key for storing all countries in the data array
      */
     const ALL_COUNTRIES_KEY = 'allcountries';
-    
+
     /**
      * Holds the data array
      * @var array
      */
-    protected $data = array();    
-    
+    protected $data = array();
+
     /**
      * Holds the name of the country class to be used
-     * @var string 
+     * @var string
      */
     protected $countryClass;
-    
+
     /**
      * Holds the event dispatcher service object
-     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface 
+     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
      */
     protected $eventService;
-    
+
     /**
      * Holds the state service object
-     * @var \Heystack\Subsystem\Core\State\State 
+     * @var \Heystack\Subsystem\Core\State\State
      */
     protected $stateService;
-    
+
     /**
      * Holds the monolog logger service object
-     * @var \Monolog\Logger 
+     * @var \Monolog\Logger
      */
     protected $monologService;
-    
+
     /**
      * Creates the ShippingHandler object
-     * @param string $countryClass
+     * @param string                                                      $countryClass
      * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventService
-     * @param \Heystack\Subsystem\Core\State\State $stateService
-     * @param \Monolog\Logger $monologService
+     * @param \Heystack\Subsystem\Core\State\State                        $stateService
+     * @param \Monolog\Logger                                             $monologService
      */
     public function __construct($countryClass, EventDispatcherInterface $eventService, State $stateService, Logger $monologService = null)
     {
@@ -91,12 +91,13 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
         $this->stateService = $stateService;
         $this->monologService = $monologService;
     }
-    
+
     /**
      * Returns an array of field names that need to managed by the shipping subsystem.
      * @return array
      */
-    public function getShippingFields(){
+    public function getShippingFields()
+    {
         return array(
             'AddressLine1',
             'AddressLine2',
@@ -110,7 +111,7 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
             'Phone'
         );
     }
-    
+
     /**
      * Returns an associative array of the shipping fields and the data that is set up for them
      * @return array
@@ -118,16 +119,16 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
     public function getShippingFieldsData()
     {
         $data = array();
-        
-        foreach($this->getShippingFields() as $shippingField){
+
+        foreach ($this->getShippingFields() as $shippingField) {
             $data[$shippingField] = $this->$shippingField;
         }
-        
+
         return $data;
     }
-    
+
     /**
-     * If after restoring state no countries are loaded onto the data array get 
+     * If after restoring state no countries are loaded onto the data array get
      * them from the database and load them to the data array, and save the state.
      * @throws \Exception
      */
@@ -141,47 +142,47 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
                 foreach ($countries as $country) {
                     $this->data[self::ALL_COUNTRIES_KEY][$country->getIdentifier()] = $country;
                 }
-                
+
                 $this->saveState();
 
             } else {
-                
-                if(isset($this->monologService)){
+
+                if (isset($this->monologService)) {
                     $this->monologService->err('Please create some countries');
                 }
-                
+
                 throw new \Exception('Please create some countries');
             }
-        }        
+        }
     }
-    
+
     /**
-     * Overrides the magic setter function for the Country field. Uses the cache for 
+     * Overrides the magic setter function for the Country field. Uses the cache for
      * retrieval and storage of the Country object
      * @param string $identifier
      */
     public function setCountry($identifier)
     {
-        if($country = $this->getCountry($identifier)){
-            
+        if ($country = $this->getCountry($identifier)) {
+
             $this->data['Country'] = $country;
-            
+
             $this->eventService->dispatch(Events::TOTAL_UPDATED);
         }
     }
-    
+
     /**
      * Uses the identifier to retrive the country object from the cache
-     * @param type $identifier
+     * @param  type                                                                  $identifier
      * @return \Heystack\Subsystem\Shipping\CountryBased\Interfaces\CountryInterface
      */
     public function getCountry($identifier)
     {
         $this->ensureDataExists();
-        
+
         return isset($this->data[self::ALL_COUNTRIES_KEY][$identifier]) ? $this->data[self::ALL_COUNTRIES_KEY][$identifier] : null;
     }
-    
+
     /**
      * Returns an array of all countries from the cache
      * @return array
@@ -189,10 +190,10 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
     public function getCountries()
     {
         $this->ensureDataExists();
-        
+
         return isset($this->data[self::ALL_COUNTRIES_KEY]) ? $this->data[self::ALL_COUNTRIES_KEY] : null;
     }
-    
+
     /**
      * Returns a unique identifier for use in the Transaction
      */
@@ -200,21 +201,21 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
     {
         return self::STATE_KEY;
     }
-    
+
     /**
      * Returns the total value of the TransactionModifier for use in the Transaction
      */
     public function getTotal()
     {
         $total = 0;
-        
-        if( $this->Country instanceof $this->countryClass){
+
+        if ($this->Country instanceof $this->countryClass) {
             $total = $this->Country->getShippingCost();
         }
-        
+
         return number_format($total,2,'.','');
     }
-    
+
     /**
      * Indicates the type of amount the modifier will return
      * Must return a constant from TransactionModifierTypes
@@ -224,4 +225,3 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
         return TransactionModifierTypes::CHARGEABLE;
     }
 }
-
