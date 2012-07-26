@@ -1,0 +1,45 @@
+parameters:
+  shipping_service.class : Heystack\Subsystem\Shipping\CountryBased\ShippingHandler
+  shipping_input_processor.class : Heystack\Subsystem\Shipping\Input\Processor
+  shipping_output_processor.class : Heystack\Subsystem\Shipping\Output\Processor
+  shipping_service_subscriber.class: Heystack\Subsystem\Shipping\Subscriber
+  country.class: Country
+
+services:
+  
+  shipping_service:
+    class: %shipping_service.class%
+    arguments: [ %country.class%, @event_dispatcher, @state, @monolog ]
+    calls:
+      - [ restoreState ]
+      
+  shipping_input_processor:
+    class: %shipping_input_processor.class%
+    arguments: [ @shipping_service ]
+    
+  shipping_output_processor:
+    class: %shipping_output_processor.class%
+    
+  input_processor_handler:
+    class: %input_processor_handler.class%
+    calls:
+      - [ addProcessor, [ @voucher_input_processor ] ]
+
+  output_processor_handler:
+    class: %output_processor_handler.class%
+    calls:
+      - [ addProcessor, [ @voucher_output_processor ] ]
+
+  transaction:
+    class: %transaction.class%
+    calls:
+      - [ addModifier, [ @voucher_holder ] ]      
+      
+  shipping_service_subscriber:
+    class: %shipping_service_subscriber.class%
+    arguments: [ @event_dispatcher, @shipping_service, @storage ]
+    
+  event_dispatcher:
+    class: %event_dispatcher.class%
+    calls: 
+      - [ addSubscriber, [ @shipping_service_subscriber ] ]      
