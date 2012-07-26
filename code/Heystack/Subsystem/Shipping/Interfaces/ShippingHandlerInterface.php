@@ -22,5 +22,9 @@ use Heystack\Subsystem\Ecommerce\Transaction\Interfaces\TransactionModifierInter
 interface ShippingHandlerInterface extends TransactionModifierInterface
 {
     public function getShippingFields();
+    public function getShippingFieldsData();
+    
+    public function setCountry($identifier);
+    public function getCountry($identifier);
     
 }

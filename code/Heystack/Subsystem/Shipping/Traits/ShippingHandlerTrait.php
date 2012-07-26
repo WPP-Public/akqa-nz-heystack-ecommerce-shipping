@@ -22,9 +22,11 @@ trait ShippingHandlerTrait
             
             if(method_exists($this, $setterMethod)){
                 $this->$setterMethod($value);
-            }
+            }else{
             
-            $this->data[$name] = $value;
+                $this->data[$name] = $value;
+                
+            }
             
         }else{
             

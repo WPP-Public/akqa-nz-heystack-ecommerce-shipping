@@ -18,4 +18,29 @@ class Country extends DataObject implements CountryInterface
         'CountryCode',
         'ShippingCost'
     );
+    
+    public function getShippingCost()
+    {
+        $price = $this->record['ShippingCost'];
+        
+        $currencyService = Heystack\Subsystem\Core\ServiceStore::getService(Heystack\Subsystem\Ecommerce\Currency\CurrencyService::STATE_KEY);
+
+        $activeCurrencyCode = $currencyService->getActiveCurrency()->getIdentifier();
+
+        switch ($activeCurrencyCode) {
+            case 'NZD':
+                $price *= 1;
+                break;
+            case 'USD':
+                $price *= 2;
+                break;
+            default:
+                $price *= 3;
+                break;
+        }
+        
+        error_log($price);
+
+        return $price;
+    }
 }

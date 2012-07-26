@@ -23,17 +23,17 @@ services:
   input_processor_handler:
     class: %input_processor_handler.class%
     calls:
-      - [ addProcessor, [ @voucher_input_processor ] ]
+      - [ addProcessor, [ @shipping_input_processor ] ]
 
   output_processor_handler:
     class: %output_processor_handler.class%
     calls:
-      - [ addProcessor, [ @voucher_output_processor ] ]
+      - [ addProcessor, [ @shipping_output_processor ] ]
 
   transaction:
     class: %transaction.class%
     calls:
-      - [ addModifier, [ @voucher_holder ] ]      
+      - [ addModifier, [ @shipping_service ] ]      
       
   shipping_service_subscriber:
     class: %shipping_service_subscriber.class%

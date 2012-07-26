@@ -16,7 +16,7 @@ trait CountryTrait
     
     public function getIdentifier()
     {
-        return $this->ClassName . $this->ID;
+        return $this->CountryCode;
     }
     
     public function getName()

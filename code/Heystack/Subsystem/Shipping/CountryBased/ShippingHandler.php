@@ -44,7 +44,7 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
     protected $monologService;
     
     
-    public function __construct(string $countryClass, EventDispatcherInterface $eventService, State $stateService, Logger $monologService = null)
+    public function __construct($countryClass, EventDispatcherInterface $eventService, State $stateService, Logger $monologService = null)
     {
         $this->countryClass = $countryClass;
         $this->eventService = $eventService;
@@ -65,6 +65,17 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
             'Email',
             'Phone'
         );
+    }
+    
+    public function getShippingFieldsData()
+    {
+        $data = array();
+        
+        foreach($this->getShippingFields() as $shippingField){
+            $data[$shippingField] = $this->$shippingField;
+        }
+        
+        return $data;
     }
     
     /**
@@ -99,6 +110,7 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
     public function setCountry($identifier)
     {
         if($country = $this->getCountry($identifier)){
+            
             $this->data['Country'] = $country;
             
             $this->eventService->dispatch(Events::TOTAL_UPDATED);
@@ -134,7 +146,7 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
     {
         $total = 0;
         
-        if(isset($this->Country)){
+        if( $this->Country instanceof $this->countryClass){
             $total = $this->Country->getShippingCost();
         }
         

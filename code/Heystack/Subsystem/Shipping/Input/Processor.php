@@ -55,6 +55,8 @@ class Processor implements ProcessorInterface
             
         }
         
+        $this->shippingService->saveState();
+        
         return array('success' => 'true');
     }    
     
