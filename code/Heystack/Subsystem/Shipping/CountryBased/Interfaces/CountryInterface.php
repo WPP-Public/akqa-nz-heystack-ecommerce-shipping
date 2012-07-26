@@ -10,11 +10,33 @@
  */
 namespace Heystack\Subsystem\Shipping\CountryBased\Interfaces;
 
+/**
+ * Defines what methods/functions a Country class needs to implement
+ *
+ * @copyright  Heyday
+ * @author Glenn Bautista <glenn@heyday.co.nz>
+ * @package Ecommerce-Shipping
+ */
 interface CountryInterface extends \Serializable
 {
+    /**
+     * Returns a unique identifier
+     */
     public function getIdentifier();
+    
+    /**
+     * Returns the name of the country object
+     */
     public function getName();
+    
+    /**
+     * Returns the country code of the country object
+     */
     public function getCountryCode();
+    
+    /**
+     * Returns the cost of shipping to the country in question
+     */
     public function getShippingCost();
 }
 

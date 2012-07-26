@@ -10,6 +10,13 @@
  */
 namespace Heystack\Subsystem\Shipping\CountryBased\Traits;
 
+/**
+ * Provides a basic implementation of the CountryInterface
+ *
+ * @copyright  Heyday
+ * @author Glenn Bautista <glenn@heyday.co.nz>
+ * @package Ecommerce-Shipping
+ */
 trait CountryTrait
 {
     use \Heystack\Subsystem\Core\State\Traits\DataObjectSerializableTrait;

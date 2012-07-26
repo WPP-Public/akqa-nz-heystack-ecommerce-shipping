@@ -28,8 +28,7 @@ use Heystack\Subsystem\Core\ContainerExtensionConfigProcessor;
  * @copyright  Heyday
  * @author Glenn Bautista <glenn@heyday.co.nz>
  * @author Cam Spiers <cameron@heyday.co.nz>
- * @package Ecommerce-Vouchers
- *
+ * @package Ecommerce-Shipping
  */
 class ContainerExtension extends ContainerExtensionConfigProcessor implements ExtensionInterface
 {

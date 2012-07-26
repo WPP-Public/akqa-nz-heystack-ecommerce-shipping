@@ -24,6 +24,13 @@ use Monolog\Logger;
 use Heystack\Subsystem\Core\State\StateableInterface;
 use Heystack\Subsystem\Core\State\State;
 
+/**
+ * An implementation of the ShippingHandlerInterface specific to 'country based' shipping cost calculation
+ *
+ * @copyright  Heyday
+ * @author Glenn Bautista <glenn@heyday.co.nz>
+ * @package Ecommerce-Shipping
+ */
 class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \Serializable
 {
     use ShippingHandlerTrait;
@@ -34,16 +41,49 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
      * Holds the key used for storing state
      */
     const STATE_KEY = 'shipping';
+    
+    /**
+     * Holds the key for storing all countries in the data array
+     */
     const ALL_COUNTRIES_KEY = 'allcountries';
     
+    /**
+     * Holds the data array
+     * @var array
+     */
     protected $data = array();    
     
+    /**
+     * Holds the name of the country class to be used
+     * @var string 
+     */
     protected $countryClass;
+    
+    /**
+     * Holds the event dispatcher service object
+     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface 
+     */
     protected $eventService;
+    
+    /**
+     * Holds the state service object
+     * @var \Heystack\Subsystem\Core\State\State 
+     */
     protected $stateService;
+    
+    /**
+     * Holds the monolog logger service object
+     * @var \Monolog\Logger 
+     */
     protected $monologService;
     
-    
+    /**
+     * Creates the ShippingHandler object
+     * @param string $countryClass
+     * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventService
+     * @param \Heystack\Subsystem\Core\State\State $stateService
+     * @param \Monolog\Logger $monologService
+     */
     public function __construct($countryClass, EventDispatcherInterface $eventService, State $stateService, Logger $monologService = null)
     {
         $this->countryClass = $countryClass;
@@ -52,6 +92,10 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
         $this->monologService = $monologService;
     }
     
+    /**
+     * Returns an array of field names that need to managed by the shipping subsystem.
+     * @return array
+     */
     public function getShippingFields(){
         return array(
             'AddressLine1',
@@ -67,6 +111,10 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
         );
     }
     
+    /**
+     * Returns an associative array of the shipping fields and the data that is set up for them
+     * @return array
+     */
     public function getShippingFieldsData()
     {
         $data = array();
@@ -107,6 +155,11 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
         }        
     }
     
+    /**
+     * Overrides the magic setter function for the Country field. Uses the cache for 
+     * retrieval and storage of the Country object
+     * @param string $identifier
+     */
     public function setCountry($identifier)
     {
         if($country = $this->getCountry($identifier)){
@@ -117,6 +170,11 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
         }
     }
     
+    /**
+     * Uses the identifier to retrive the country object from the cache
+     * @param type $identifier
+     * @return \Heystack\Subsystem\Shipping\CountryBased\Interfaces\CountryInterface
+     */
     public function getCountry($identifier)
     {
         $this->ensureDataExists();
@@ -124,6 +182,10 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
         return isset($this->data[self::ALL_COUNTRIES_KEY][$identifier]) ? $this->data[self::ALL_COUNTRIES_KEY][$identifier] : null;
     }
     
+    /**
+     * Returns an array of all countries from the cache
+     * @return array
+     */
     public function getCountries()
     {
         $this->ensureDataExists();
