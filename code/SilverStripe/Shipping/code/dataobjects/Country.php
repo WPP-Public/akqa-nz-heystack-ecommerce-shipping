@@ -38,8 +38,6 @@ class Country extends DataObject implements CountryInterface
                 $price *= 3;
                 break;
         }
-        
-        error_log($price);
 
         return $price;
     }

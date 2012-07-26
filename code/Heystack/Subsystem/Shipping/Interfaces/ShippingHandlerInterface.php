@@ -26,5 +26,6 @@ interface ShippingHandlerInterface extends TransactionModifierInterface
     
     public function setCountry($identifier);
     public function getCountry($identifier);
+    public function getCountries();
     
 }
