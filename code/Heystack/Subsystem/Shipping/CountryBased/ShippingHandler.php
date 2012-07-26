@@ -83,7 +83,7 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
      * them from the database and load them to the data array, and save the state.
      * @throws \Exception
      */
-    public function ensureDataExists()
+    protected function ensureDataExists()
     {
         if (!$this->data || !isset($this->data[self::ALL_COUNTRIES_KEY])) {
             $countries = \DataObject::get($this->countryClass);
