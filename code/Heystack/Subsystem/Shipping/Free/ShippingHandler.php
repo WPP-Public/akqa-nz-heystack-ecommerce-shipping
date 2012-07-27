@@ -6,9 +6,9 @@
  */
 
 /**
- * CountryBased namespace
+ * Free namespace
  */
-namespace Heystack\Subsystem\Shipping\CountryBased;
+namespace Heystack\Subsystem\Shipping\Free;
 
 use Heystack\Subsystem\Shipping\Events;
 use Heystack\Subsystem\Shipping\Interfaces\ShippingHandlerInterface;
@@ -25,7 +25,7 @@ use Heystack\Subsystem\Core\State\StateableInterface;
 use Heystack\Subsystem\Core\State\State;
 
 /**
- * An implementation of the ShippingHandlerInterface specific to 'country based' shipping cost calculation
+ * An implementation of the ShippingHandlerInterface specific to 'free' shipping cost calculation
  *
  * @copyright  Heyday
  * @author Glenn Bautista <glenn@heyday.co.nz>
@@ -166,8 +166,6 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
         if ($country = $this->getCountry($identifier)) {
 
             $this->data['Country'] = $country;
-
-            $this->eventService->dispatch(Events::TOTAL_UPDATED);
         }
     }
 
@@ -209,10 +207,6 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
     {
         $total = 0;
 
-        if ($this->Country instanceof $this->countryClass) {
-            $total = $this->Country->getShippingCost();
-        }
-
         return number_format($total,2,'.','');
     }
 
@@ -222,6 +216,6 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
      */
     public function getType()
     {
-        return TransactionModifierTypes::CHARGEABLE;
+        return TransactionModifierTypes::NEUTRAL;
     }
 }

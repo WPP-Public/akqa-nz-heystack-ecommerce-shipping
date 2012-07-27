@@ -1,7 +1,7 @@
 <?php
 
 use Heystack\Subsystem\Shipping\CountryBased\Interfaces\CountryInterface;
-use Heystack\Subsystem\Shipping\CountryBased\Traits\CountryTrait;
+use Heystack\Subsystem\Shipping\Traits\CountryTrait;
 
 class Country extends DataObject implements CountryInterface
 {
