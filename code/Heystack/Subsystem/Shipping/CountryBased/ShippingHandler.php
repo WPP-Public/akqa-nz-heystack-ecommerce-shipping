@@ -40,7 +40,7 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
     /**
      * Holds the key used for storing state
      */
-    const STATE_KEY = 'shipping';
+    const IDENTIFIER = 'shipping';
 
     /**
      * Holds the key for storing all countries in the data array
@@ -199,7 +199,7 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
      */
     public function getIdentifier()
     {
-        return self::STATE_KEY;
+        return self::IDENTIFIER;
     }
 
     /**
