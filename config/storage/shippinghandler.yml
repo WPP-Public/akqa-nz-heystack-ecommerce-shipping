@@ -1,0 +1,7 @@
+id: ShippingHandler
+flat:
+  Total: Varchar(255)
+related:
+parent:
+  Parent: +Transaction
+children:
