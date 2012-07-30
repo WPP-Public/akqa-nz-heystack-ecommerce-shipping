@@ -8,7 +8,7 @@
 /**
  * Traits namespace
  */
-namespace Heystack\Subsystem\Shipping\CountryBased\Traits;
+namespace Heystack\Subsystem\Shipping\Traits;
 
 /**
  * Provides a basic implementation of the CountryInterface
@@ -34,10 +34,5 @@ trait CountryTrait
     public function getCountryCode()
     {
         return $this->record['CountryCode'];
-    }
-
-    public function getShippingCost()
-    {
-        return $this->record['ShippingCost'];
     }
 }
