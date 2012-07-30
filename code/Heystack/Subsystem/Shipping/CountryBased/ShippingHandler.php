@@ -23,7 +23,6 @@ use Monolog\Logger;
 
 use Heystack\Subsystem\Core\State\StateableInterface;
 use Heystack\Subsystem\Core\State\State;
-
 use Heystack\Subsystem\Core\ViewableData\ViewableDataInterface;
 
 /**

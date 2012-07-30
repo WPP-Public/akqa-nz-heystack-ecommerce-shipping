@@ -10,7 +10,6 @@
  */
 namespace Heystack\Subsystem\Shipping\Free;
 
-use Heystack\Subsystem\Shipping\Events;
 use Heystack\Subsystem\Shipping\Interfaces\ShippingHandlerInterface;
 use Heystack\Subsystem\Shipping\Traits\ShippingHandlerTrait;
 
@@ -23,6 +22,10 @@ use Monolog\Logger;
 
 use Heystack\Subsystem\Core\State\StateableInterface;
 use Heystack\Subsystem\Core\State\State;
+use Heystack\Subsystem\Core\ViewableData\ViewableDataInterface;
+use Heystack\Subsystem\Core\Storage\StorableInterface;
+use Heystack\Subsystem\Core\Storage\Backends\SilverStripeOrm\Backend;
+use Heystack\Subsystem\Core\Storage\Traits\ParentReferenceTrait;
 
 /**
  * An implementation of the ShippingHandlerInterface specific to 'free' shipping cost calculation
@@ -31,11 +34,12 @@ use Heystack\Subsystem\Core\State\State;
  * @author Glenn Bautista <glenn@heyday.co.nz>
  * @package Ecommerce-Shipping
  */
-class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \Serializable
+class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \Serializable, ViewableDataInterface, StorableInterface
 {
     use ShippingHandlerTrait;
     use TransactionModifierStateTrait;
     use TransactionModifierSerializeTrait;
+    use ParentReferenceTrait;
 
     /**
      * Holds the key used for storing state
@@ -96,7 +100,7 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
      * Returns an array of field names that need to managed by the shipping subsystem.
      * @return array
      */
-    public function getShippingFields()
+    public function getDynamicMethods()
     {
         return array(
             'AddressLine1',
@@ -111,20 +115,21 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
             'Phone'
         );
     }
-
-    /**
-     * Returns an associative array of the shipping fields and the data that is set up for them
-     * @return array
-     */
-    public function getShippingFieldsData()
+    
+    public function getCastings()
     {
-        $data = array();
-
-        foreach ($this->getShippingFields() as $shippingField) {
-            $data[$shippingField] = $this->$shippingField;
-        }
-
-        return $data;
+        return array(
+            'AddressLine1' => 'Text',
+            'AddressLine2' => 'Text',
+            'City' => 'Text',
+            'Postcode' => 'Text',
+            'Country' => 'Text',
+            'Title' => 'Text',
+            'FirstName' => 'Text',
+            'Surname' => 'Text',
+            'Email' => 'Text',
+            'Phone' => 'Text'
+        );
     }
 
     /**
@@ -218,4 +223,36 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
     {
         return TransactionModifierTypes::NEUTRAL;
     }
+    
+    public function getStorableData()
+    {
+
+       $data = array();
+
+       $data['id'] = 'ShippingHandler';
+
+       $data['flat'] = array(
+           'ParentID' => $this->parentReference
+       );
+
+       $data['parent'] = true;
+
+       return $data;
+
+    }
+
+    public function getStorableIdentifier()
+    {
+
+        return self::IDENTIFIER;
+
+    }
+    
+    public function getStorableBackendIdentifiers()
+    {
+        return array(
+            Backend::IDENTIFIER
+        );
+    }
+    
 }
