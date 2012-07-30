@@ -22,17 +22,10 @@ use Heystack\Subsystem\Ecommerce\Transaction\Interfaces\TransactionModifierInter
 interface ShippingHandlerInterface extends TransactionModifierInterface
 {
     /**
-     * Returns an array of field names that need to managed by the shipping subsystem.
-     * @return array
+     * Defines what methods the implementing class implements dynamically through __get and __set
      */
-    public function getShippingFields();
-
-    /**
-     * Returns an associative array of the shipping fields and the data that is set up for them
-     * @return array
-     */
-    public function getShippingFieldsData();
-
+    public function getDynamicMethods();
+    
     /**
      * Overrides the magic setter function for the Country field. Uses the cache for
      * retrieval and storage of the Country object

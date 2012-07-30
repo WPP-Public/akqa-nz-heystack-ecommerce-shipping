@@ -24,6 +24,8 @@ use Monolog\Logger;
 use Heystack\Subsystem\Core\State\StateableInterface;
 use Heystack\Subsystem\Core\State\State;
 
+use Heystack\Subsystem\Core\ViewableData\ViewableDataInterface;
+
 /**
  * An implementation of the ShippingHandlerInterface specific to 'country based' shipping cost calculation
  *
@@ -31,7 +33,7 @@ use Heystack\Subsystem\Core\State\State;
  * @author Glenn Bautista <glenn@heyday.co.nz>
  * @package Ecommerce-Shipping
  */
-class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \Serializable
+class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \Serializable, ViewableDataInterface
 {
     use ShippingHandlerTrait;
     use TransactionModifierStateTrait;
@@ -96,7 +98,7 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
      * Returns an array of field names that need to managed by the shipping subsystem.
      * @return array
      */
-    public function getShippingFields()
+    public function getDynamicMethods()
     {
         return array(
             'AddressLine1',
@@ -111,20 +113,21 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
             'Phone'
         );
     }
-
-    /**
-     * Returns an associative array of the shipping fields and the data that is set up for them
-     * @return array
-     */
-    public function getShippingFieldsData()
+    
+    public function getCastings()
     {
-        $data = array();
-
-        foreach ($this->getShippingFields() as $shippingField) {
-            $data[$shippingField] = $this->$shippingField;
-        }
-
-        return $data;
+        return array(
+            'AddressLine1' => 'Text',
+            'AddressLine2' => 'Text',
+            'City' => 'Text',
+            'Postcode' => 'Text',
+            'Country' => 'Text',
+            'Title' => 'Text',
+            'FirstName' => 'Text',
+            'Surname' => 'Text',
+            'Email' => 'Text',
+            'Phone' => 'Text'
+        );
     }
 
     /**
