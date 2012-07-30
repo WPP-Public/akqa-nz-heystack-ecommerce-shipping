@@ -61,8 +61,8 @@ class Processor implements ProcessorInterface
     {
         $data = $request->requestVars();
 
-        $shippingFields = $this->shippingService->getShippingFields();
-
+        $shippingFields = $this->shippingService->getDynamicMethods();
+        
         foreach ($data as $key => $value) {
 
             if (in_array($key, $shippingFields)) {

@@ -23,7 +23,7 @@ trait ShippingHandlerTrait
      * Returns an array of field names that need to managed by the shipping subsystem.
      * @return array
      */
-    abstract public function getShippingFields();
+    abstract public function getDynamicMethods();
 
     /**
      * Magic setter function that uses the data array to store a property's data.
@@ -34,7 +34,7 @@ trait ShippingHandlerTrait
      */
     public function __set(string $name, $value)
     {
-        if (in_array($name, $this->getShippingFields())) {
+        if (in_array($name, $this->getDynamicMethods())) {
 
             $setterMethod = 'set' . $name;
 
@@ -52,7 +52,7 @@ trait ShippingHandlerTrait
                 $this->monologService->err($name . ' is not a valid Shipping property');
             }
 
-            throw \Exception($name . ' is not a valid Shipping property');
+            throw new \Exception($name . ' is not a valid Shipping property');
 
         }
     }
@@ -65,7 +65,7 @@ trait ShippingHandlerTrait
      */
     public function __get(string $name)
     {
-        if (in_array($name, $this->getShippingFields())) {
+        if (in_array($name, $this->getDynamicMethods())) {
 
             return isset($this->data[$name]) ? $this->data[$name] : null;
 
@@ -75,7 +75,7 @@ trait ShippingHandlerTrait
                 $this->monologService->err($name . ' is not a valid Shipping property');
             }
 
-            throw \Exception($name . ' is not a valid Shipping property');
+            throw new \Exception($name . ' is not a valid Shipping property');
 
         }
     }
