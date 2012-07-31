@@ -8,7 +8,7 @@
 /**
  * CountryBased namespace
  */
-namespace Heystack\Subsystem\Shipping\CountryBased;
+namespace Heystack\Subsystem\Shipping\Types\CountryBased;
 
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;

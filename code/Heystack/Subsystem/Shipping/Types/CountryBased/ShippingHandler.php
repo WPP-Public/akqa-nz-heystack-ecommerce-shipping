@@ -8,7 +8,7 @@
 /**
  * CountryBased namespace
  */
-namespace Heystack\Subsystem\Shipping\CountryBased;
+namespace Heystack\Subsystem\Shipping\Types\CountryBased;
 
 use Heystack\Subsystem\Shipping\Events;
 use Heystack\Subsystem\Shipping\Interfaces\ShippingHandlerInterface;

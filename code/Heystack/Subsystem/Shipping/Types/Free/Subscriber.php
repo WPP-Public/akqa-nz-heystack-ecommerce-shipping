@@ -8,7 +8,7 @@
 /**
  * CountryBased namespace
  */
-namespace Heystack\Subsystem\Shipping\Free;
+namespace Heystack\Subsystem\Shipping\Types\Free;
 
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;

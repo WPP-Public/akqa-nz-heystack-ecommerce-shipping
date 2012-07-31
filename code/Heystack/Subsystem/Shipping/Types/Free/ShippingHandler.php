@@ -8,7 +8,7 @@
 /**
  * Free namespace
  */
-namespace Heystack\Subsystem\Shipping\Free;
+namespace Heystack\Subsystem\Shipping\Types\Free;
 
 use Heystack\Subsystem\Shipping\Interfaces\ShippingHandlerInterface;
 use Heystack\Subsystem\Shipping\Traits\ShippingHandlerTrait;

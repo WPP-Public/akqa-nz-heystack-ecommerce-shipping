@@ -8,7 +8,7 @@
 /**
  * Interfaces namespace
  */
-namespace Heystack\Subsystem\Shipping\CountryBased\Interfaces;
+namespace Heystack\Subsystem\Shipping\Types\CountryBased\Interfaces;
 
 use Heystack\Subsystem\Shipping\Interfaces\CountryInterface as CountryBaseInterface;
 
