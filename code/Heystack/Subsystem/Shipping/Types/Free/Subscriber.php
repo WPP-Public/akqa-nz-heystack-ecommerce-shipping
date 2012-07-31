@@ -14,11 +14,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 use Heystack\Subsystem\Ecommerce\Transaction\Events as TransactionEvents;
-
-use Heystack\Subsystem\Core\Storage\Event as StorageEvent;
-
 use Heystack\Subsystem\Shipping\Interfaces\ShippingHandlerInterface;
-
 use Heystack\Subsystem\Core\Storage\Storage;
 
 /**

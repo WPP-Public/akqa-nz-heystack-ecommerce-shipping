@@ -4,7 +4,9 @@ class CountryAdmin extends ModelAdmin
 {
 
     public static $managed_models = array(
-        'Country'
+        'Country',
+        'Zone',
+        'ZonedCountry'
     );
 
     public static $url_segment = 'countries';
