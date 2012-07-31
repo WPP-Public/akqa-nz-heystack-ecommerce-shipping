@@ -8,18 +8,13 @@
 /**
  * CountryBased namespace
  */
-namespace Heystack\Subsystem\Shipping\CountryBased;
+namespace Heystack\Subsystem\Shipping\Types\Free;
 
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-use Heystack\Subsystem\Ecommerce\Currency\Events as CurrencyEvents;
-
 use Heystack\Subsystem\Ecommerce\Transaction\Events as TransactionEvents;
-use Heystack\Subsystem\Ecommerce\Transaction\Event\TransactionStoredEvent;
-
 use Heystack\Subsystem\Shipping\Interfaces\ShippingHandlerInterface;
-
 use Heystack\Subsystem\Core\Storage\Storage;
 
 /**
@@ -70,28 +65,22 @@ class Subscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            Events::TOTAL_UPDATED          => array('onTotalUpdated', 0),
-            CurrencyEvents::CHANGED        => array('onTotalUpdated', 0),
             TransactionEvents::STORED      => array('onTransactionStored', 0)
         );
     }
-
-    /**
-     * Called after the ShippingHandler's total is updated.
-     * Tells the transaction to update its total.
-     */
-    public function onTotalUpdated()
-    {
-        $this->eventService->dispatch(TransactionEvents::UPDATE);
-    }
-
+    
     /**
      * Called after the Transaction is stored.
      * Tells the storage service to store all the information held in the ShippingHandler
-     * @param \Heystack\Subsystem\Ecommerce\Transaction\Event\TransactionStoredEvent $transaction
+     * @param \Heystack\Subsystem\Core\Storage\Event $event
      */
-    public function onTransactionStored(TransactionStoredEvent $event)
-    {
+    public function onTransactionStored(StorageEvent $event)
+    {   
+        
+        $this->shippingService->setParentReference($event->getParentReference());
+        
+        $this->storageService->process($this->shippingService);
+        
 //        $voucherHolderID = $this->storageService->process($this->voucherHolder, false, $event->getTransactionID());
 //
 //        if ($this->voucherHolder->getVouchers()) {

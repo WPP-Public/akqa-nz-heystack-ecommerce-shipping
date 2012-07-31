@@ -1,9 +1,9 @@
 parameters:
-  shipping_service.class : Heystack\Subsystem\Shipping\Free\ShippingHandler
+  shipping_service.class : Heystack\Subsystem\Shipping\Types\CountryBased\ShippingHandler
   shipping_input_processor.class : Heystack\Subsystem\Shipping\Input\Processor
   shipping_output_processor.class : Heystack\Subsystem\Shipping\Output\Processor
-  shipping_service_subscriber.class: Heystack\Subsystem\Shipping\Free\Subscriber
-  country.class: Country
+  shipping_service_subscriber.class: Heystack\Subsystem\Shipping\Types\CountryBased\Subscriber
+  country.class: ZonedCountry
 
 services:
   
