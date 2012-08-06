@@ -21,8 +21,6 @@ use Heystack\Subsystem\Shipping\Interfaces\ShippingHandlerInterface;
 use Heystack\Subsystem\Shipping\Events;
 use Heystack\Subsystem\Core\Storage\Storage;
 
-
-
 /**
  * Handles both subscribing to events and acting on those events needed for ShippingHandler to work properly
  *

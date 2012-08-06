@@ -115,7 +115,7 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
             'Phone'
         );
     }
-    
+
     public function getCastings()
     {
         return array(
@@ -223,7 +223,7 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
     {
         return TransactionModifierTypes::NEUTRAL;
     }
-    
+
     public function getStorableData()
     {
 
@@ -247,12 +247,12 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
         return self::IDENTIFIER;
 
     }
-    
+
     public function getStorableBackendIdentifiers()
     {
         return array(
             Backend::IDENTIFIER
         );
     }
-    
+
 }

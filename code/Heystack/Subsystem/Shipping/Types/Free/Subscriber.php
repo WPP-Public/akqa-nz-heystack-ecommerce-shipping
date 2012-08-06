@@ -68,19 +68,19 @@ class Subscriber implements EventSubscriberInterface
             TransactionEvents::STORED      => array('onTransactionStored', 0)
         );
     }
-    
+
     /**
      * Called after the Transaction is stored.
      * Tells the storage service to store all the information held in the ShippingHandler
      * @param \Heystack\Subsystem\Core\Storage\Event $event
      */
     public function onTransactionStored(StorageEvent $event)
-    {   
-        
+    {
+
         $this->shippingService->setParentReference($event->getParentReference());
-        
+
         $this->storageService->process($this->shippingService);
-        
+
 //        $voucherHolderID = $this->storageService->process($this->voucherHolder, false, $event->getTransactionID());
 //
 //        if ($this->voucherHolder->getVouchers()) {

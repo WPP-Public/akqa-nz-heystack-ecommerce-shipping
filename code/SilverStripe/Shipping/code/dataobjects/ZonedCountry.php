@@ -11,8 +11,8 @@ class ZonedCountry extends DataObject implements CountryInterface
         'Name' => 'Varchar(255)',
         'CountryCode' => 'Varchar(255)'
     );
-    
-    static $has_one = array(
+
+    public static $has_one = array(
         'Zone' => 'Zone'
     );
 
@@ -23,12 +23,12 @@ class ZonedCountry extends DataObject implements CountryInterface
 
     public function getShippingCost()
     {
-        if($this->ZoneID){
-        
+        if ($this->ZoneID) {
+
             return $this->Zone()->cost();
-            
+
         }
-        
+
         return 0;
     }
 }

@@ -112,7 +112,7 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
             'Phone'
         );
     }
-    
+
     public function getCastings()
     {
         return array(

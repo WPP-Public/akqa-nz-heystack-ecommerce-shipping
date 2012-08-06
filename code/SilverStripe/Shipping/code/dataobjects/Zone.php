@@ -2,29 +2,29 @@
 
 class Zone extends DataObject
 {
-    static $db = array(
+    public static $db = array(
         'Name' => 'Varchar(255)',
         'ShippingCost' => 'Decimal(10,2)',
         'FreeAfter' => 'Decimal(10,2)'
     );
-    
-    static $has_many = array(
+
+    public static $has_many = array(
         'Countries' => 'ZonedCountry'
     );
-    
+
     public function cost()
     {
-        if($this->FreeAfter > 0){
+        if ($this->FreeAfter > 0) {
             $productHolder = Heystack\Subsystem\Core\ServiceStore::getService(Heystack\Subsystem\Products\Services::PRODUCTHOLDER);
-            
-            if($productHolder->getTotal() >= $this->FreeAfter){
+
+            if ($productHolder->getTotal() >= $this->FreeAfter) {
                 return 0;
             }
         }
-        
+
         return $this->baseCost();
     }
-    
+
     protected function baseCost()
     {
         $price = $this->record['ShippingCost'];
