@@ -32,7 +32,7 @@ trait ShippingHandlerTrait
      * @param  type       $value
      * @throws \Exception
      */
-    public function __set(string $name, $value)
+    public function __set($name, $value)
     {
         if (in_array($name, $this->getDynamicMethods())) {
 
@@ -63,7 +63,7 @@ trait ShippingHandlerTrait
      * @return type
      * @throws \Exception
      */
-    public function __get(string $name)
+    public function __get($name)
     {
         if (in_array($name, $this->getDynamicMethods())) {
 
