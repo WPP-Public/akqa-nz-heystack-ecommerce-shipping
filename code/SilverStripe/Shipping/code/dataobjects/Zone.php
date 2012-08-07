@@ -21,29 +21,19 @@ class Zone extends DataObject
                 return 0;
             }
         }
+        
+        $price = $this->baseCost();
+        
+        $this->extend('updateCost',$price);
 
-        return $this->baseCost();
+        return $price;
     }
 
     protected function baseCost()
     {
         $price = $this->record['ShippingCost'];
-
-        $currencyService = Heystack\Subsystem\Core\ServiceStore::getService(Heystack\Subsystem\Ecommerce\Services::CURRENCY_SERVICE);
-
-        $activeCurrencyCode = $currencyService->getActiveCurrency()->getIdentifier();
-
-        switch ($activeCurrencyCode) {
-            case 'NZD':
-                $price *= 1;
-                break;
-            case 'USD':
-                $price *= 2;
-                break;
-            default:
-                $price *= 3;
-                break;
-        }
+        
+        $this->extend('updateBaseCost',$price);
 
         return $price;
     }
