@@ -14,11 +14,11 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 use Heystack\Subsystem\Ecommerce\Currency\Events as CurrencyEvents;
+use Heystack\Subsystem\Ecommerce\Locale\Events as LocaleEvents;
 use Heystack\Subsystem\Ecommerce\Transaction\Events as TransactionEvents;
 use Heystack\Subsystem\Ecommerce\Transaction\Event\TransactionStoredEvent;
 
 use Heystack\Subsystem\Shipping\Interfaces\ShippingHandlerInterface;
-use Heystack\Subsystem\Shipping\Events;
 use Heystack\Subsystem\Core\Storage\Storage;
 
 /**
@@ -69,8 +69,8 @@ class Subscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            Events::TOTAL_UPDATED          => array('onTotalUpdated', 0),
             CurrencyEvents::CHANGED        => array('onTotalUpdated', 0),
+            LocaleEvents::CHANGED          => array('onTotalUpdated', 0),
             TransactionEvents::STORED      => array('onTransactionStored', 0)
         );
     }

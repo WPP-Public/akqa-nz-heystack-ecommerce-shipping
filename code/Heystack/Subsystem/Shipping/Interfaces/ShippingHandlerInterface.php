@@ -25,25 +25,17 @@ interface ShippingHandlerInterface extends TransactionModifierInterface
      * Defines what methods the implementing class implements dynamically through __get and __set
      */
     public function getDynamicMethods();
-
+    
     /**
-     * Overrides the magic setter function for the Country field. Uses the cache for
+     * Overrides the magic setter function for the Country field. Uses the LocaleHandler for
      * retrieval and storage of the Country object
      * @param string $identifier
      */
     public function setCountry($identifier);
 
     /**
-     * Uses the identifier to retrive the country object from the cache
-     * @param  type                                                                  $identifier
-     * @return \Heystack\Subsystem\Shipping\CountryBased\Interfaces\CountryInterface
+     * Overrides the magic getter function for the Country field. Uses the Locale Handler for
+     * retrieval and storage of the Country object
      */
-    public function getCountry($identifier);
-
-    /**
-     * Returns an array of all countries from the cache
-     * @return array
-     */
-    public function getCountries();
-
+    public function getCountry();
 }

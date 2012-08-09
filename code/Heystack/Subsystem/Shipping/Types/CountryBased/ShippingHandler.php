@@ -10,13 +10,13 @@
  */
 namespace Heystack\Subsystem\Shipping\Types\CountryBased;
 
-use Heystack\Subsystem\Shipping\Events;
 use Heystack\Subsystem\Shipping\Interfaces\ShippingHandlerInterface;
 use Heystack\Subsystem\Shipping\Traits\ShippingHandlerTrait;
 
 use Heystack\Subsystem\Ecommerce\Transaction\TransactionModifierTypes;
 use Heystack\Subsystem\Ecommerce\Transaction\Traits\TransactionModifierStateTrait;
 use Heystack\Subsystem\Ecommerce\Transaction\Traits\TransactionModifierSerializeTrait;
+use Heystack\Subsystem\Ecommerce\Locale\LocaleHandler;
 
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Monolog\Logger;
@@ -24,6 +24,7 @@ use Monolog\Logger;
 use Heystack\Subsystem\Core\State\StateableInterface;
 use Heystack\Subsystem\Core\State\State;
 use Heystack\Subsystem\Core\ViewableData\ViewableDataInterface;
+
 
 /**
  * An implementation of the ShippingHandlerInterface specific to 'country based' shipping cost calculation
@@ -44,21 +45,16 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
     const IDENTIFIER = 'shipping';
 
     /**
-     * Holds the key for storing all countries in the data array
-     */
-    const ALL_COUNTRIES_KEY = 'allcountries';
-
-    /**
      * Holds the data array
      * @var array
      */
     protected $data = array();
-
+    
     /**
-     * Holds the name of the country class to be used
-     * @var string
+     * Holds the locale handler object
+     * @var \Heystack\Subsystem\Ecommerce\Locale\LocaleHandler 
      */
-    protected $countryClass;
+    protected $localeHandler;
 
     /**
      * Holds the event dispatcher service object
@@ -85,9 +81,9 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
      * @param \Heystack\Subsystem\Core\State\State                        $stateService
      * @param \Monolog\Logger                                             $monologService
      */
-    public function __construct($countryClass, EventDispatcherInterface $eventService, State $stateService, Logger $monologService = null)
+    public function __construct(LocaleHandler $localeHandler, EventDispatcherInterface $eventService, State $stateService, Logger $monologService = null)
     {
-        $this->countryClass = $countryClass;
+        $this->localeHandler = $localeHandler;
         $this->eventService = $eventService;
         $this->stateService = $stateService;
         $this->monologService = $monologService;
@@ -128,36 +124,7 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
             'Phone' => 'Text'
         );
     }
-
-    /**
-     * If after restoring state no countries are loaded onto the data array get
-     * them from the database and load them to the data array, and save the state.
-     * @throws \Exception
-     */
-    protected function ensureDataExists()
-    {
-        if (!$this->data || !isset($this->data[self::ALL_COUNTRIES_KEY])) {
-            $countries = \DataObject::get($this->countryClass);
-
-            if ($countries instanceof \DataObjectSet && $countries->exists()) {
-
-                foreach ($countries as $country) {
-                    $this->data[self::ALL_COUNTRIES_KEY][$country->getIdentifier()] = $country;
-                }
-
-                $this->saveState();
-
-            } else {
-
-                if (isset($this->monologService)) {
-                    $this->monologService->err('Please create some countries');
-                }
-
-                throw new \Exception('Please create some countries');
-            }
-        }
-    }
-
+    
     /**
      * Overrides the magic setter function for the Country field. Uses the cache for
      * retrieval and storage of the Country object
@@ -165,37 +132,19 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
      */
     public function setCountry($identifier)
     {
-        if ($country = $this->getCountry($identifier)) {
-
-            $this->data['Country'] = $country;
-
-            $this->eventService->dispatch(Events::TOTAL_UPDATED);
-        }
+        $this->localeHandler->setActiveCountry($identifier);
     }
 
     /**
      * Uses the identifier to retrive the country object from the cache
      * @param  type                                                                  $identifier
      * @return \Heystack\Subsystem\Shipping\CountryBased\Interfaces\CountryInterface
-     */
-    public function getCountry($identifier)
+     */    
+    public function getCountry()
     {
-        $this->ensureDataExists();
-
-        return isset($this->data[self::ALL_COUNTRIES_KEY][$identifier]) ? $this->data[self::ALL_COUNTRIES_KEY][$identifier] : null;
+        return $this->localeHandler->getActiveCountry();
     }
-
-    /**
-     * Returns an array of all countries from the cache
-     * @return array
-     */
-    public function getCountries()
-    {
-        $this->ensureDataExists();
-
-        return isset($this->data[self::ALL_COUNTRIES_KEY]) ? $this->data[self::ALL_COUNTRIES_KEY] : null;
-    }
-
+    
     /**
      * Returns a unique identifier for use in the Transaction
      */
@@ -210,12 +159,14 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
     public function getTotal()
     {
         $total = 0;
+        
+        $countryClass = $this->localeHandler->getCountryClass();
 
-        if ($this->Country instanceof $this->countryClass) {
+        if ($this->Country instanceof $countryClass) {
             $total = $this->Country->getShippingCost();
         }
 
-        return number_format($total,2,'.','');
+        return $total;
     }
 
     /**
