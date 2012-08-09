@@ -1,6 +1,16 @@
 data_provider_id: shipping
 id: ShippingHandler
 flat:
+  AddressLine1: Varchar(255)
+  AddressLine2: Varchar(255)
+  City: Varchar(255)
+  Postcode: Varchar(255)
+  Country: Varchar(255)
+  Title: Varchar(255)
+  FirstName: Varchar(255)
+  Surname: Varchar(255)
+  Email: Varchar(255)
+  Phone: Varchar(255)
   Total: Varchar(255)
 related:
 parent:

@@ -16,6 +16,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Heystack\Subsystem\Ecommerce\Transaction\Events as TransactionEvents;
 use Heystack\Subsystem\Shipping\Interfaces\ShippingHandlerInterface;
 use Heystack\Subsystem\Core\Storage\Storage;
+use Heystack\Subsystem\Core\Storage\Event as StorageEvent;
 
 /**
  * Handles both subscribing to events and acting on those events needed for ShippingHandler to work properly
@@ -80,20 +81,8 @@ class Subscriber implements EventSubscriberInterface
         $this->shippingService->setParentReference($event->getParentReference());
 
         $this->storageService->process($this->shippingService);
-
-//        $voucherHolderID = $this->storageService->process($this->voucherHolder, false, $event->getTransactionID());
-//
-//        if ($this->voucherHolder->getVouchers()) {
-//
-//            foreach ($this->voucherHolder->getVouchers() as $voucher) {
-//
-//                $this->storageService->process($voucher, false, $voucherHolderID);
-//
-//            }
-//
-//        }
-//
-//        $this->eventService->dispatch(Events::STORED);
+        
+        $this->eventService->dispatch(Events::STORED);
     }
 
 }

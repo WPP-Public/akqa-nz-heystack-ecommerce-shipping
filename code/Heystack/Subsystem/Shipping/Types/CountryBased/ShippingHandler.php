@@ -24,6 +24,9 @@ use Monolog\Logger;
 use Heystack\Subsystem\Core\State\StateableInterface;
 use Heystack\Subsystem\Core\State\State;
 use Heystack\Subsystem\Core\ViewableData\ViewableDataInterface;
+use Heystack\Subsystem\Core\Storage\StorableInterface;
+use Heystack\Subsystem\Core\Storage\Backends\SilverStripeOrm\Backend;
+use Heystack\Subsystem\Core\Storage\Traits\ParentReferenceTrait;
 
 
 /**
@@ -33,11 +36,12 @@ use Heystack\Subsystem\Core\ViewableData\ViewableDataInterface;
  * @author Glenn Bautista <glenn@heyday.co.nz>
  * @package Ecommerce-Shipping
  */
-class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \Serializable, ViewableDataInterface
+class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \Serializable, ViewableDataInterface, StorableInterface
 {
     use ShippingHandlerTrait;
     use TransactionModifierStateTrait;
     use TransactionModifierSerializeTrait;
+    use ParentReferenceTrait;
 
     /**
      * Holds the key used for storing state
@@ -176,5 +180,43 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
     public function getType()
     {
         return TransactionModifierTypes::CHARGEABLE;
+    }
+    
+    public function getStorableData()
+    {
+
+       return array(
+           'id' => 'ShippingHandler',
+           'parent' => true,
+           'flat' => array(
+               'ParentID' => $this->parentReference,
+               'AddressLine1' => $this->AddressLine1,
+               'AddressLine2' => $this->AddressLine2,
+               'City' => $this->City,
+               'Postcode' => $this->Postcode,
+               'Country' => $this->Country->getName(),
+               'Title' => $this->Title,
+               'FirstName' => $this->FirstName,
+               'Surname' => $this->Surname,
+               'Email' => $this->Email,
+               'Phone' => $this->Phone,
+               'Total' => $this->getTotal()
+           )
+       );
+
+    }
+
+    public function getStorableIdentifier()
+    {
+
+        return self::IDENTIFIER;
+
+    }
+
+    public function getStorableBackendIdentifiers()
+    {
+        return array(
+            Backend::IDENTIFIER
+        );
     }
 }

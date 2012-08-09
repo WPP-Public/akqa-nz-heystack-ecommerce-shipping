@@ -186,17 +186,24 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
     public function getStorableData()
     {
 
-       $data = array();
-
-       $data['id'] = 'ShippingHandler';
-
-       $data['flat'] = array(
-           'ParentID' => $this->parentReference
+       return array(
+           'id' => 'ShippingHandler',
+           'parent' => true,
+           'flat' => array(
+               'ParentID' => $this->parentReference,
+               'AddressLine1' => $this->AddressLine1,
+               'AddressLine2' => $this->AddressLine2,
+               'City' => $this->City,
+               'Postcode' => $this->Postcode,
+               'Country' => $this->Country->getName(),
+               'Title' => $this->Title,
+               'FirstName' => $this->FirstName,
+               'Surname' => $this->Surname,
+               'Email' => $this->Email,
+               'Phone' => $this->Phone,
+               'Total' => $this->getTotal()
+           )
        );
-
-       $data['parent'] = true;
-
-       return $data;
 
     }
 

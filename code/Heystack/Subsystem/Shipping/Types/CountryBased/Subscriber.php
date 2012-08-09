@@ -16,10 +16,10 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Heystack\Subsystem\Ecommerce\Currency\Events as CurrencyEvents;
 use Heystack\Subsystem\Ecommerce\Locale\Events as LocaleEvents;
 use Heystack\Subsystem\Ecommerce\Transaction\Events as TransactionEvents;
-use Heystack\Subsystem\Ecommerce\Transaction\Event\TransactionStoredEvent;
 
 use Heystack\Subsystem\Shipping\Interfaces\ShippingHandlerInterface;
 use Heystack\Subsystem\Core\Storage\Storage;
+use Heystack\Subsystem\Core\Storage\Event as StorageEvent;
 
 /**
  * Handles both subscribing to events and acting on those events needed for ShippingHandler to work properly
@@ -87,23 +87,15 @@ class Subscriber implements EventSubscriberInterface
     /**
      * Called after the Transaction is stored.
      * Tells the storage service to store all the information held in the ShippingHandler
-     * @param \Heystack\Subsystem\Ecommerce\Transaction\Event\TransactionStoredEvent $transaction
+     * @param \Heystack\Subsystem\Core\Storage\Event $event
      */
-    public function onTransactionStored(TransactionStoredEvent $event)
+    public function onTransactionStored(StorageEvent $event)
     {
-//        $voucherHolderID = $this->storageService->process($this->voucherHolder, false, $event->getTransactionID());
-//
-//        if ($this->voucherHolder->getVouchers()) {
-//
-//            foreach ($this->voucherHolder->getVouchers() as $voucher) {
-//
-//                $this->storageService->process($voucher, false, $voucherHolderID);
-//
-//            }
-//
-//        }
-//
-//        $this->eventService->dispatch(Events::STORED);
+        $this->shippingService->setParentReference($event->getParentReference());
+
+        $this->storageService->process($this->shippingService);
+        
+        $this->eventService->dispatch(Events::STORED);
     }
 
 }
