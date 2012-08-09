@@ -21,6 +21,8 @@ use Heystack\Subsystem\Shipping\Interfaces\ShippingHandlerInterface;
 use Heystack\Subsystem\Core\Storage\Storage;
 use Heystack\Subsystem\Core\Storage\Event as StorageEvent;
 
+use Heystack\Subsystem\Core\Storage\Backends\SilverStripeOrm\Backend;
+use Heystack\Subsystem\Shipping\Events;
 /**
  * Handles both subscribing to events and acting on those events needed for ShippingHandler to work properly
  *
@@ -71,7 +73,7 @@ class Subscriber implements EventSubscriberInterface
         return array(
             CurrencyEvents::CHANGED        => array('onTotalUpdated', 0),
             LocaleEvents::CHANGED          => array('onTotalUpdated', 0),
-            TransactionEvents::STORED      => array('onTransactionStored', 0)
+            Backend::IDENTIFIER . '.' . TransactionEvents::STORED      => array('onTransactionStored', 0)
         );
     }
 
@@ -91,6 +93,7 @@ class Subscriber implements EventSubscriberInterface
      */
     public function onTransactionStored(StorageEvent $event)
     {
+        
         $this->shippingService->setParentReference($event->getParentReference());
 
         $this->storageService->process($this->shippingService);

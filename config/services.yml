@@ -42,3 +42,15 @@ services:
     class: %event_dispatcher.class%
     calls: 
       - [ addSubscriber, [ @shipping_service_subscriber ] ]      
+  
+  dataobject_generator:
+    class: %dataobject_generator.class%
+    calls:
+      - [ addYamlSchema, [ ecommerce-shipping/config/storage/shippinghandler.yml ] ]
+      
+  ss_orm_backend:
+    class: %ss_orm_backend.class%
+    calls:
+      - [ addDataProvider, [ @shipping_service ] ]
+      
+      

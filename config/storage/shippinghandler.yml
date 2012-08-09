@@ -11,7 +11,7 @@ flat:
   Surname: Varchar(255)
   Email: Varchar(255)
   Phone: Varchar(255)
-  Total: Varchar(255)
+  Total: Decimal(10,2)
 related:
 parent:
   Parent: +Transaction
