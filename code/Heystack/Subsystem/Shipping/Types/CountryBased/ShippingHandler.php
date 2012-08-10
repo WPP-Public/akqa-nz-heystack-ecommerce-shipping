@@ -16,7 +16,7 @@ use Heystack\Subsystem\Shipping\Traits\ShippingHandlerTrait;
 use Heystack\Subsystem\Ecommerce\Transaction\TransactionModifierTypes;
 use Heystack\Subsystem\Ecommerce\Transaction\Traits\TransactionModifierStateTrait;
 use Heystack\Subsystem\Ecommerce\Transaction\Traits\TransactionModifierSerializeTrait;
-use Heystack\Subsystem\Ecommerce\Locale\LocaleHandler;
+use Heystack\Subsystem\Ecommerce\Locale\Interfaces\LocaleHandlerInterface;
 
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Monolog\Logger;
@@ -85,7 +85,7 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
      * @param \Heystack\Subsystem\Core\State\State                        $stateService
      * @param \Monolog\Logger                                             $monologService
      */
-    public function __construct(LocaleHandler $localeHandler, EventDispatcherInterface $eventService, State $stateService, Logger $monologService = null)
+    public function __construct(LocaleHandlerInterface $localeHandler, EventDispatcherInterface $eventService, State $stateService, Logger $monologService = null)
     {
         $this->localeHandler = $localeHandler;
         $this->eventService = $eventService;

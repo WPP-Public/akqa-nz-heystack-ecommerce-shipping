@@ -54,7 +54,7 @@ class Subscriber implements EventSubscriberInterface
     /**
      * Creates the ShippingHandler Subscriber object
      * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface      $eventService
-     * @param \Heystack\Subsystem\Shipping\Interfaces\ShippingHandlerInterface $voucherHolder
+     * @param \Heystack\Subsystem\Shipping\Interfaces\ShippingHandlerInterface $shippingService
      * @param \Heystack\Subsystem\Core\Storage\Storage                         $storageService
      */
     public function __construct(EventDispatcherInterface $eventService, ShippingHandlerInterface $shippingService,  Storage $storageService)
