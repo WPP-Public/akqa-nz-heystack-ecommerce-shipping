@@ -1,5 +1,5 @@
-data_provider_id: shipping
-id: ShippingHandler
+data_provider_id: shippinghandler
+id: Shipping
 flat:
   AddressLine1: Varchar(255)
   AddressLine2: Varchar(255)

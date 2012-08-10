@@ -46,7 +46,7 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
     /**
      * Holds the key used for storing state
      */
-    const IDENTIFIER = 'shipping';
+    const IDENTIFIER = 'shippinghandler';
 
     /**
      * Holds the data array
@@ -194,7 +194,7 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
                'AddressLine2' => $this->AddressLine2,
                'City' => $this->City,
                'Postcode' => $this->Postcode,
-               'Country' => $this->Country->getName(),
+               'Country' => !is_null($this->Country) ? $this->Country->getName() : null,
                'Title' => $this->Title,
                'FirstName' => $this->FirstName,
                'Surname' => $this->Surname,
@@ -211,6 +211,17 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
 
         return self::IDENTIFIER;
 
+    }
+    
+    /**
+     * Get the name of the schema this system relates to
+     * @return string
+     */
+    public function getSchemaName()
+    {
+        
+        return 'Shipping';
+        
     }
 
     public function getStorableBackendIdentifiers()
