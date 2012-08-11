@@ -4,7 +4,7 @@
     "repositories": [
         {
             "type": "composer",
-            "url": "http://satis/"
+            "url": "http://packages:satis@packages.heyday.net.nz/"
         }
     ],
     "require": {        
