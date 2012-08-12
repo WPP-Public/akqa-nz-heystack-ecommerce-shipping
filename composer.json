@@ -8,8 +8,7 @@
         }
     ],
     "require": {        
-        "php": ">=5.4.0",
-        "composer/installers": "dev-silverstripe"
+        "php": ">=5.4.0"
     },
     "autoload": {
         "psr-0": {
