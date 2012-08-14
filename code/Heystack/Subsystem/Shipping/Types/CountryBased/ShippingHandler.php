@@ -16,7 +16,7 @@ use Heystack\Subsystem\Shipping\Traits\ShippingHandlerTrait;
 use Heystack\Subsystem\Ecommerce\Transaction\TransactionModifierTypes;
 use Heystack\Subsystem\Ecommerce\Transaction\Traits\TransactionModifierStateTrait;
 use Heystack\Subsystem\Ecommerce\Transaction\Traits\TransactionModifierSerializeTrait;
-use Heystack\Subsystem\Ecommerce\Locale\Interfaces\LocaleHandlerInterface;
+use Heystack\Subsystem\Ecommerce\Locale\Interfaces\LocaleServiceInterface;
 
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Monolog\Logger;
@@ -55,10 +55,10 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
     protected $data = array();
     
     /**
-     * Holds the locale handler object
-     * @var \Heystack\Subsystem\Ecommerce\Locale\LocaleHandler 
+     * Holds the locale service object
+     * @var \Heystack\Subsystem\Ecommerce\Locale\LocaleService 
      */
-    protected $localeHandler;
+    protected $localeService;
 
     /**
      * Holds the event dispatcher service object
@@ -85,9 +85,9 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
      * @param \Heystack\Subsystem\Core\State\State                        $stateService
      * @param \Monolog\Logger                                             $monologService
      */
-    public function __construct(LocaleHandlerInterface $localeHandler, EventDispatcherInterface $eventService, State $stateService, Logger $monologService = null)
+    public function __construct(LocaleServiceInterface $localeService, EventDispatcherInterface $eventService, State $stateService, Logger $monologService = null)
     {
-        $this->localeHandler = $localeHandler;
+        $this->localeService = $localeService;
         $this->eventService = $eventService;
         $this->stateService = $stateService;
         $this->monologService = $monologService;
@@ -136,7 +136,7 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
      */
     public function setCountry($identifier)
     {
-        $this->localeHandler->setActiveCountry($identifier);
+        $this->localeService->setActiveCountry($identifier);
     }
 
     /**
@@ -146,7 +146,7 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
      */    
     public function getCountry()
     {
-        return $this->localeHandler->getActiveCountry();
+        return $this->localeService->getActiveCountry();
     }
     
     /**
@@ -164,7 +164,7 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
     {
         $total = 0;
         
-        $countryClass = $this->localeHandler->getCountryClass();
+        $countryClass = $this->localeService->getCountryClass();
 
         if ($this->Country instanceof $countryClass) {
             $total = $this->Country->getShippingCost();

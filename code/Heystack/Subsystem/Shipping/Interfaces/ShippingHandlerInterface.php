@@ -27,14 +27,14 @@ interface ShippingHandlerInterface extends TransactionModifierInterface
     public function getDynamicMethods();
     
     /**
-     * Overrides the magic setter function for the Country field. Uses the LocaleHandler for
+     * Overrides the magic setter function for the Country field. Uses the LocaleService for
      * retrieval and storage of the Country object
      * @param string $identifier
      */
     public function setCountry($identifier);
 
     /**
-     * Overrides the magic getter function for the Country field. Uses the Locale Handler for
+     * Overrides the magic getter function for the Country field. Uses the Locale Service for
      * retrieval and storage of the Country object
      */
     public function getCountry();
