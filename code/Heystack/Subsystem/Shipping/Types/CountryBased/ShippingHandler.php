@@ -28,7 +28,6 @@ use Heystack\Subsystem\Core\Storage\StorableInterface;
 use Heystack\Subsystem\Core\Storage\Backends\SilverStripeOrm\Backend;
 use Heystack\Subsystem\Core\Storage\Traits\ParentReferenceTrait;
 
-
 /**
  * An implementation of the ShippingHandlerInterface specific to 'country based' shipping cost calculation
  *
@@ -53,10 +52,10 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
      * @var array
      */
     protected $data = array();
-    
+
     /**
      * Holds the locale service object
-     * @var \Heystack\Subsystem\Ecommerce\Locale\LocaleService 
+     * @var \Heystack\Subsystem\Ecommerce\Locale\LocaleService
      */
     protected $localeService;
 
@@ -128,7 +127,7 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
             'Phone' => 'Text'
         );
     }
-    
+
     /**
      * Overrides the magic setter function for the Country field. Uses the cache for
      * retrieval and storage of the Country object
@@ -143,12 +142,12 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
      * Uses the identifier to retrive the country object from the cache
      * @param  type                                                                  $identifier
      * @return \Heystack\Subsystem\Shipping\CountryBased\Interfaces\CountryInterface
-     */    
+     */
     public function getCountry()
     {
         return $this->localeService->getActiveCountry();
     }
-    
+
     /**
      * Returns a unique identifier for use in the Transaction
      */
@@ -163,7 +162,7 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
     public function getTotal()
     {
         $total = 0;
-        
+
         $countryClass = $this->localeService->getCountryClass();
 
         if ($this->Country instanceof $countryClass) {
@@ -181,7 +180,7 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
     {
         return TransactionModifierTypes::CHARGEABLE;
     }
-    
+
     public function getStorableData()
     {
 
@@ -212,16 +211,16 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
         return self::IDENTIFIER;
 
     }
-    
+
     /**
      * Get the name of the schema this system relates to
      * @return string
      */
     public function getSchemaName()
     {
-        
+
         return 'Shipping';
-        
+
     }
 
     public function getStorableBackendIdentifiers()

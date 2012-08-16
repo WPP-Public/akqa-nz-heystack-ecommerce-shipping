@@ -25,7 +25,7 @@ interface ShippingHandlerInterface extends TransactionModifierInterface
      * Defines what methods the implementing class implements dynamically through __get and __set
      */
     public function getDynamicMethods();
-    
+
     /**
      * Overrides the magic setter function for the Country field. Uses the LocaleService for
      * retrieval and storage of the Country object

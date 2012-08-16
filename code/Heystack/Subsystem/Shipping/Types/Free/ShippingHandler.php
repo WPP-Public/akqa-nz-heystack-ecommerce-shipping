@@ -52,13 +52,13 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
      * @var array
      */
     protected $data = array();
-    
+
     /**
      * Holds the locale service object
      * @var \Heystack\Subsystem\Ecommerce\Locale\LocaleService
      */
     protected $localeService;
-    
+
     /**
      * Holds the name of the country class to be used
      * @var string
@@ -153,7 +153,6 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
         return $this->localeService->getActiveCountry();
     }
 
-
     /**
      * Returns a unique identifier for use in the Transaction
      */
@@ -211,16 +210,16 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
         return self::IDENTIFIER;
 
     }
-    
+
     /**
      * Get the name of the schema this system relates to
      * @return string
      */
     public function getSchemaName()
     {
-        
+
         return 'Shipping';
-        
+
     }
 
     public function getStorableBackendIdentifiers()

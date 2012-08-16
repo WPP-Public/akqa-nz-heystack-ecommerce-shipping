@@ -81,7 +81,7 @@ class Subscriber implements EventSubscriberInterface
         $this->shippingService->setParentReference($event->getParentReference());
 
         $this->storageService->process($this->shippingService);
-        
+
         $this->eventService->dispatch(Events::STORED);
     }
 

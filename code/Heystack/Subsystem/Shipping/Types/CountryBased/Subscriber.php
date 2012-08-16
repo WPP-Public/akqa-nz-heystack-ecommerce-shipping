@@ -93,11 +93,11 @@ class Subscriber implements EventSubscriberInterface
      */
     public function onTransactionStored(StorageEvent $event)
     {
-        
+
         $this->shippingService->setParentReference($event->getParentReference());
 
         $this->storageService->process($this->shippingService);
-        
+
         $this->eventService->dispatch(Events::STORED);
     }
 

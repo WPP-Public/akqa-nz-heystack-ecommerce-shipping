@@ -39,9 +39,9 @@ trait ShippingHandlerTrait
             $setterMethod = 'set' . $name;
 
             if (method_exists($this, $setterMethod)) {
-                
+
                 $this->$setterMethod($value);
-                
+
             } else {
 
                 $this->data[$name] = $value;
@@ -68,17 +68,17 @@ trait ShippingHandlerTrait
     public function __get($name)
     {
         if (in_array($name, $this->getDynamicMethods())) {
-            
+
             $getterMethod = 'get' . $name;
 
             if (method_exists($this, $getterMethod)) {
-                
+
                 return $this->$getterMethod();
-                
+
             } else {
-                
+
                 return isset($this->data[$name]) ? $this->data[$name] : null;
-                
+
             }
 
         } else {
