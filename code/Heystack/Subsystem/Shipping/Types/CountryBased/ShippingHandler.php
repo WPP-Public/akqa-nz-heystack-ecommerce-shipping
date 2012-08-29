@@ -45,7 +45,7 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
     /**
      * Holds the key used for storing state
      */
-    const IDENTIFIER = 'shippinghandler';
+    const IDENTIFIER = 'shipping';
 
     /**
      * Holds the data array
