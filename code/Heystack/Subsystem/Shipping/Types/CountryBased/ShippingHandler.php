@@ -110,6 +110,7 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
             'Email',
             'Phone',
             
+            'BillingAsShipping',
             'BillingAddressLine1',
             'BillingAddressLine2',
             'BillingCity',
@@ -137,6 +138,7 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
             'Email' => 'Text',
             'Phone' => 'Text',
             
+            'BillingAsShipping' => 'Boolean',
             'BillingAddressLine1' => 'Text',
             'BillingAddressLine2' => 'Text',
             'BillingCity' => 'Text',
@@ -222,7 +224,8 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
                 'Email' => $this->Email,
                 'Phone' => $this->Phone,
                 'Total' => $this->getTotal(),
-
+                
+                'BillingAsShipping' => $this->BillingAsShipping,
                 'BillingAddressLine1' => $this->BillingAddressLine1,
                 'BillingAddressLine2' => $this->BillingAddressLine2,
                 'BillingCity' => $this->BillingCity,
