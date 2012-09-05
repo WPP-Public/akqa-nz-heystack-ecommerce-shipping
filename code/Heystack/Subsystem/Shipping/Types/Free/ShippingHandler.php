@@ -144,11 +144,11 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
     }
 
     /**
-     * Uses the identifier to retrive the country object from the cache
+     * Retrive the country object from the cache
      * @param  type                                                                  $identifier
      * @return \Heystack\Subsystem\Shipping\CountryBased\Interfaces\CountryInterface
      */
-    public function getCountry($identifier)
+    public function getCountry()
     {
         return $this->localeService->getActiveCountry();
     }
