@@ -21,6 +21,7 @@ flat:
   BillingSurname: Varchar(255)
   BillingEmail: Varchar(255)
   BillingPhone: Varchar(255)
+  BillingAsShipping: Boolean
   Total: Decimal(10,2)
 related:
 parent:
