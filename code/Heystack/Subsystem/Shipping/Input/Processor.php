@@ -8,7 +8,7 @@
 /**
  * Input namespace
  */
-namespace Ecoya;
+namespace Heystack\Subsystem\Shipping\Input;
 
 use Heystack\Subsystem\Core\Input\ProcessorInterface;
 
@@ -24,7 +24,7 @@ use Heystack\Subsystem\Shipping\Interfaces\ShippingHandlerInterface;
  * @author Glenn Bautista <glenn@heyday.co.nz>
  * @package Ecommerce-Shipping
  */
-class ShippingInputProcessor implements ProcessorInterface
+class Processor implements ProcessorInterface
 {
 
     /**
