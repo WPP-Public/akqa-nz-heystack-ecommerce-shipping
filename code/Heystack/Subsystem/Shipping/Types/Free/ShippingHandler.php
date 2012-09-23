@@ -113,7 +113,19 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
             'FirstName',
             'Surname',
             'Email',
-            'Phone'
+            'Phone',
+            
+            'BillingAsShipping',
+            'BillingAddressLine1',
+            'BillingAddressLine2',
+            'BillingCity',
+            'BillingPostcode',
+            'BillingCountry',
+            'BillingTitle',
+            'BillingFirstName', 
+            'BillingSurname',
+            'BillingEmail',
+            'BillingPhone'
         );
     }
 
@@ -129,7 +141,19 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
             'FirstName' => 'Text',
             'Surname' => 'Text',
             'Email' => 'Text',
-            'Phone' => 'Text'
+            'Phone' => 'Text',
+            
+            'BillingAsShipping' => 'Boolean',
+            'BillingAddressLine1' => 'Text',
+            'BillingAddressLine2' => 'Text',
+            'BillingCity' => 'Text',
+            'BillingPostcode' => 'Text',
+            'BillingCountry' => 'Text',
+            'BillingTitle' => 'Text',
+            'BillingFirstName' => 'Text',
+            'BillingSurname' => 'Text',
+            'BillingEmail' => 'Text',
+            'BillingPhone' => 'Text'
         );
     }
 
@@ -183,22 +207,34 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
     public function getStorableData()
     {
 
-       return array(
-           'id' => 'ShippingHandler',
-           'parent' => true,
-           'flat' => array(
-               'ParentID' => $this->parentReference,
-               'AddressLine1' => $this->AddressLine1,
-               'AddressLine2' => $this->AddressLine2,
-               'City' => $this->City,
-               'Postcode' => $this->Postcode,
-               'Country' => !is_null($this->Country) ? $this->Country->getName() : null,
-               'Title' => $this->Title,
-               'FirstName' => $this->FirstName,
-               'Surname' => $this->Surname,
-               'Email' => $this->Email,
-               'Phone' => $this->Phone,
-               'Total' => $this->getTotal()
+        return array(
+            'id' => 'ShippingHandler',
+            'parent' => true,
+            'flat' => array(
+                'ParentID' => $this->parentReference,
+                'AddressLine1' => $this->AddressLine1,
+                'AddressLine2' => $this->AddressLine2,
+                'City' => $this->City,
+                'Postcode' => $this->Postcode,
+                'Country' => !is_null($this->Country) ? $this->Country->getName() : null,
+                'Title' => $this->Title,
+                'FirstName' => $this->FirstName,
+                'Surname' => $this->Surname,
+                'Email' => $this->Email,
+                'Phone' => $this->Phone,
+                'Total' => $this->getTotal(),
+                
+                'BillingAsShipping' => $this->BillingAsShipping,
+                'BillingAddressLine1' => $this->BillingAddressLine1,
+                'BillingAddressLine2' => $this->BillingAddressLine2,
+                'BillingCity' => $this->BillingCity,
+                'BillingPostcode' => $this->BillingPostcode,
+                'BillingCountry' => !is_null($this->BillingCountry) ? $this->localeService->getCountry($this->BillingCountry)->getName() : null,
+                'BillingTitle' => $this->BillingTitle,
+                'BillingFirstName' => $this->BillingFirstName,
+                'BillingSurname' => $this->BillingSurname,
+                'BillingEmail' => $this->BillingEmail,
+                'BillingPhone' => $this->BillingPhone,
            )
        );
 
