@@ -19,6 +19,7 @@ use Heystack\Subsystem\Core\Storage\Storage;
 use Heystack\Subsystem\Core\Storage\Event as StorageEvent;
 
 use Heystack\Subsystem\Core\Storage\Backends\SilverStripeOrm\Backend;
+use Heystack\Subsystem\Shipping\Events;
 
 /**
  * Handles both subscribing to events and acting on those events needed for ShippingHandler to work properly
