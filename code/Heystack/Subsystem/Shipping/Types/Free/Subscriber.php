@@ -18,6 +18,8 @@ use Heystack\Subsystem\Shipping\Interfaces\ShippingHandlerInterface;
 use Heystack\Subsystem\Core\Storage\Storage;
 use Heystack\Subsystem\Core\Storage\Event as StorageEvent;
 
+use Heystack\Subsystem\Core\Storage\Backends\SilverStripeOrm\Backend;
+
 /**
  * Handles both subscribing to events and acting on those events needed for ShippingHandler to work properly
  *
@@ -66,7 +68,7 @@ class Subscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            TransactionEvents::STORED      => array('onTransactionStored', 0)
+            Backend::IDENTIFIER . '.' . TransactionEvents::STORED      => array('onTransactionStored', 0)
         );
     }
 
