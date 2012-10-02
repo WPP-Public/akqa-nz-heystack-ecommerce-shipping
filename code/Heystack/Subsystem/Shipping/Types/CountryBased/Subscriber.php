@@ -6,22 +6,23 @@
  */
 
 /**
- * Shipping namespace
+ * CountryBased namespace
  */
-namespace Heystack\Subsystem\Shipping;
+namespace Heystack\Subsystem\Shipping\Types\CountryBased;
 
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 use Heystack\Subsystem\Ecommerce\Currency\Events as CurrencyEvents;
-
+use Heystack\Subsystem\Ecommerce\Locale\Events as LocaleEvents;
 use Heystack\Subsystem\Ecommerce\Transaction\Events as TransactionEvents;
-use Heystack\Subsystem\Ecommerce\Transaction\Event\TransactionStoredEvent;
 
 use Heystack\Subsystem\Shipping\Interfaces\ShippingHandlerInterface;
-
 use Heystack\Subsystem\Core\Storage\Storage;
+use Heystack\Subsystem\Core\Storage\Event as StorageEvent;
 
+use Heystack\Subsystem\Core\Storage\Backends\SilverStripeOrm\Backend;
+use Heystack\Subsystem\Shipping\Events;
 /**
  * Handles both subscribing to events and acting on those events needed for ShippingHandler to work properly
  *
@@ -53,7 +54,7 @@ class Subscriber implements EventSubscriberInterface
     /**
      * Creates the ShippingHandler Subscriber object
      * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface      $eventService
-     * @param \Heystack\Subsystem\Shipping\Interfaces\ShippingHandlerInterface $voucherHolder
+     * @param \Heystack\Subsystem\Shipping\Interfaces\ShippingHandlerInterface $shippingService
      * @param \Heystack\Subsystem\Core\Storage\Storage                         $storageService
      */
     public function __construct(EventDispatcherInterface $eventService, ShippingHandlerInterface $shippingService,  Storage $storageService)
@@ -70,9 +71,9 @@ class Subscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            Events::TOTAL_UPDATED          => array('onTotalUpdated', 0),
             CurrencyEvents::CHANGED        => array('onTotalUpdated', 0),
-            TransactionEvents::STORED      => array('onTransactionStored', 0)
+            LocaleEvents::CHANGED          => array('onTotalUpdated', 0),
+            Backend::IDENTIFIER . '.' . TransactionEvents::STORED      => array('onTransactionStored', 0)
         );
     }
 
@@ -88,23 +89,16 @@ class Subscriber implements EventSubscriberInterface
     /**
      * Called after the Transaction is stored.
      * Tells the storage service to store all the information held in the ShippingHandler
-     * @param \Heystack\Subsystem\Ecommerce\Transaction\Event\TransactionStoredEvent $transaction
+     * @param \Heystack\Subsystem\Core\Storage\Event $event
      */
-    public function onTransactionStored(TransactionStoredEvent $event)
+    public function onTransactionStored(StorageEvent $event)
     {
-//        $voucherHolderID = $this->storageService->process($this->voucherHolder, false, $event->getTransactionID());
-//
-//        if ($this->voucherHolder->getVouchers()) {
-//
-//            foreach ($this->voucherHolder->getVouchers() as $voucher) {
-//
-//                $this->storageService->process($voucher, false, $voucherHolderID);
-//
-//            }
-//
-//        }
-//
-//        $this->eventService->dispatch(Events::STORED);
+
+        $this->shippingService->setParentReference($event->getParentReference());
+
+        $this->storageService->process($this->shippingService);
+
+        $this->eventService->dispatch(Events::STORED);
     }
 
 }

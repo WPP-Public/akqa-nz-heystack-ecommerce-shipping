@@ -23,7 +23,7 @@ trait ShippingHandlerTrait
      * Returns an array of field names that need to managed by the shipping subsystem.
      * @return array
      */
-    abstract public function getShippingFields();
+    abstract public function getDynamicMethods();
 
     /**
      * Magic setter function that uses the data array to store a property's data.
@@ -32,14 +32,16 @@ trait ShippingHandlerTrait
      * @param  type       $value
      * @throws \Exception
      */
-    public function __set(string $name, $value)
+    public function __set($name, $value)
     {
-        if (in_array($name, $this->getShippingFields())) {
+        if (in_array($name, $this->getDynamicMethods())) {
 
             $setterMethod = 'set' . $name;
 
             if (method_exists($this, $setterMethod)) {
+
                 $this->$setterMethod($value);
+
             } else {
 
                 $this->data[$name] = $value;
@@ -52,7 +54,7 @@ trait ShippingHandlerTrait
                 $this->monologService->err($name . ' is not a valid Shipping property');
             }
 
-            throw \Exception($name . ' is not a valid Shipping property');
+            throw new \Exception($name . ' is not a valid Shipping property');
 
         }
     }
@@ -63,11 +65,21 @@ trait ShippingHandlerTrait
      * @return type
      * @throws \Exception
      */
-    public function __get(string $name)
+    public function __get($name)
     {
-        if (in_array($name, $this->getShippingFields())) {
+        if (in_array($name, $this->getDynamicMethods())) {
 
-            return isset($this->data[$name]) ? $this->data[$name] : null;
+            $getterMethod = 'get' . $name;
+
+            if (method_exists($this, $getterMethod)) {
+
+                return $this->$getterMethod();
+
+            } else {
+
+                return isset($this->data[$name]) ? $this->data[$name] : null;
+
+            }
 
         } else {
 
@@ -75,7 +87,7 @@ trait ShippingHandlerTrait
                 $this->monologService->err($name . ' is not a valid Shipping property');
             }
 
-            throw \Exception($name . ' is not a valid Shipping property');
+            throw new \Exception($name . ' is not a valid Shipping property');
 
         }
     }
