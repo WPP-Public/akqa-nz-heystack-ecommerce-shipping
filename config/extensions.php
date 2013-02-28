@@ -1,5 +1,4 @@
 <?php
+use Camspiers\DependencyInjection\SharedContainerFactory;
 
-return array(
-    5 => '\Heystack\Subsystem\Shipping\ContainerExtension'
-);
+SharedContainerFactory::addExtension(new Heystack\Subsystem\Shipping\ContainerExtension);
