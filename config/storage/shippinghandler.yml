@@ -26,4 +26,4 @@ flat:
 related:
 parent:
   Parent: +Transaction
-children:
+children: -

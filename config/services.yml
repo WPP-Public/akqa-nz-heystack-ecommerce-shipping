@@ -11,46 +11,29 @@ services:
     arguments: [ @locale_service, @event_dispatcher, @state, @monolog ]
     calls:
       - [ restoreState ]
+    tags:
+      - { name: ss_orm_backend.data_provider }
+      - { name: transaction.modifier }
       
   shipping_input_processor:
     class: %shipping_input_processor.class%
     arguments: [ @shipping_service ]
+    tags:
+      - { name: input_processor_handler.processor }
     
   shipping_output_processor:
     class: %shipping_output_processor.class%
-    
-  input_processor_handler:
-    class: %input_processor_handler.class%
-    calls:
-      - [ addProcessor, [ @shipping_input_processor ] ]
-
-  output_processor_handler:
-    class: %output_processor_handler.class%
-    calls:
-      - [ addProcessor, [ @shipping_output_processor ] ]
-
-  transaction:
-    class: %transaction.class%
-    calls:
-      - [ addModifier, [ @shipping_service ] ]      
+    tags:
+      - { name: output_processor_handler.processor }
       
   shipping_service_subscriber:
     class: %shipping_service_subscriber.class%
     arguments: [ @event_dispatcher, @shipping_service, @storage ]
-    
-  event_dispatcher:
-    class: %event_dispatcher.class%
-    calls: 
-      - [ addSubscriber, [ @shipping_service_subscriber ] ]      
-  
-  dataobject_generator:
-    class: %dataobject_generator.class%
-    calls:
-      - [ addYamlSchema, [ ecommerce-shipping/config/storage/shippinghandler.yml ] ]
+    tags:
+      - { name: event_dispatcher.subscriber }
       
-  ss_orm_backend:
-    class: %ss_orm_backend.class%
-    calls:
-      - [ addDataProvider, [ @shipping_service ] ]
-      
-      
+  shippinghandler_schema:
+    class: %yaml_data_object_schema.class%
+    arguments: [ ecommerce-shipping/config/storage/shippinghandler.yml, @state_global ]
+    tags:
+      - { name: dataobject_generator.schema }
