@@ -10,6 +10,7 @@
  */
 namespace Heystack\Subsystem\Shipping\Types\Free;
 
+use Heystack\Subsystem\Core\Identifier\Identifier;
 use Heystack\Subsystem\Shipping\Interfaces\ShippingHandlerInterface;
 use Heystack\Subsystem\Shipping\Traits\ShippingHandlerTrait;
 
@@ -179,10 +180,11 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
 
     /**
      * Returns a unique identifier for use in the Transaction
+     * @return \Heystack\Subsystem\Core\Identifier\Identifier
      */
     public function getIdentifier()
     {
-        return self::IDENTIFIER;
+        return new Identifier(self::IDENTIFIER);
     }
 
     /**

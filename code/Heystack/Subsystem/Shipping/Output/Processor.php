@@ -10,6 +10,7 @@
  */
 namespace Heystack\Subsystem\Shipping\Output;
 
+use Heystack\Subsystem\Core\Identifier\Identifier;
 use Heystack\Subsystem\Core\Output\ProcessorInterface;
 
 /**
@@ -26,11 +27,11 @@ class Processor implements ProcessorInterface
 {
     /**
      * Returns the identifier for this object
-     * @return string
+     * @return \Heystack\Subsystem\Core\Identifier\Identifier
      */
     public function getIdentifier()
     {
-        return 'shipping';
+        return new Identifier('shipping');
     }
 
     /**
