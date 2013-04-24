@@ -37,3 +37,9 @@ services:
     arguments: [ ecommerce-shipping/config/storage/shippinghandler.yml, @state_global ]
     tags:
       - { name: dataobject_generator.schema }
+
+  transaction_shippinghandler_schema:
+    class: %yaml_data_object_schema.class%
+    arguments: [ ecommerce-shipping/config/storage/transaction_shippinghandler.yml, @state_global ]
+    tags:
+      - { name: dataobject_generator.schema }
