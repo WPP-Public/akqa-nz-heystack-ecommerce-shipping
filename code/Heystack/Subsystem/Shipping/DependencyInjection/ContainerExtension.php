@@ -10,13 +10,13 @@
  */
 namespace Heystack\Subsystem\Shipping\DependencyInjection;
 
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
-
 use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
+use Heystack\Subsystem\Shipping\Config\ContainerConfig;
+use Symfony\Component\Config\Definition\Processor;
 
-use Heystack\Subsystem\Core\DependencyInjection\ContainerExtensionConfigProcessor;
 
 /**
  * Container extension for Heystack.
@@ -30,7 +30,7 @@ use Heystack\Subsystem\Core\DependencyInjection\ContainerExtensionConfigProcesso
  * @author Cam Spiers <cameron@heyday.co.nz>
  * @package Ecommerce-Shipping
  */
-class ContainerExtension extends ContainerExtensionConfigProcessor implements ExtensionInterface
+class ContainerExtension extends Extension
 {
 
     /**
@@ -41,16 +41,22 @@ class ContainerExtension extends ContainerExtensionConfigProcessor implements Ex
      * @param  ContainerBuilder $container
      * @return null
      */
-    public function load(array $config, ContainerBuilder $container)
+    public function load(array $configs, ContainerBuilder $container)
     {
-        $loader = new YamlFileLoader(
+        (new YamlFileLoader(
             $container,
-            new FileLocator(ECOMMERCE_SHIPPING_BASE_PATH . '/config')
+            new FileLocator(ECOMMERCE_SHIPPING_BASE_PATH . '/config/')
+        ))->load('services.yml');
+
+        $config = (new Processor())->processConfiguration(
+            new ContainerConfig(),
+            $configs
         );
 
-        $loader->load('services.yml');
-
-        $this->processConfig($config, $container);
+        if (isset($config['yml_shipping_handler']) && $container->hasDefinition('shipping_handler_schema')) {
+            $definition = $container->getDefinition('shipping_handler_schema');
+            $definition->replaceArgument(0, $config['yml_shipping_handler']);
+        }
     }
 
     /**
@@ -79,5 +85,4 @@ class ContainerExtension extends ContainerExtensionConfigProcessor implements Ex
     {
         return 'shipping';
     }
-
 }
