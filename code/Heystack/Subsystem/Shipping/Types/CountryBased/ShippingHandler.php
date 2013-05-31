@@ -11,23 +11,21 @@
 namespace Heystack\Subsystem\Shipping\Types\CountryBased;
 
 use Heystack\Subsystem\Core\Identifier\Identifier;
+use Heystack\Subsystem\Core\State\State;
+use Heystack\Subsystem\Core\State\StateableInterface;
+use Heystack\Subsystem\Core\Storage\Backends\SilverStripeOrm\Backend;
+use Heystack\Subsystem\Core\Storage\StorableInterface;
+use Heystack\Subsystem\Core\Storage\Traits\ParentReferenceTrait;
+use Heystack\Subsystem\Core\ViewableData\ViewableDataInterface;
+use Heystack\Subsystem\Ecommerce\Locale\Interfaces\LocaleServiceInterface;
+use Heystack\Subsystem\Ecommerce\Transaction\Traits\TransactionModifierSerializeTrait;
+use Heystack\Subsystem\Ecommerce\Transaction\Traits\TransactionModifierStateTrait;
+use Heystack\Subsystem\Ecommerce\Transaction\TransactionModifierTypes;
 use Heystack\Subsystem\Shipping\Interfaces\ShippingHandlerInterface;
 use Heystack\Subsystem\Shipping\Traits\ShippingHandlerTrait;
-
-use Heystack\Subsystem\Ecommerce\Transaction\TransactionModifierTypes;
-use Heystack\Subsystem\Ecommerce\Transaction\Traits\TransactionModifierStateTrait;
-use Heystack\Subsystem\Ecommerce\Transaction\Traits\TransactionModifierSerializeTrait;
-use Heystack\Subsystem\Ecommerce\Locale\Interfaces\LocaleServiceInterface;
-
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Heystack\Subsystem\Shipping\Types\CountryBased\Interfaces\CountryInterface;
 use Monolog\Logger;
-
-use Heystack\Subsystem\Core\State\StateableInterface;
-use Heystack\Subsystem\Core\State\State;
-use Heystack\Subsystem\Core\ViewableData\ViewableDataInterface;
-use Heystack\Subsystem\Core\Storage\StorableInterface;
-use Heystack\Subsystem\Core\Storage\Backends\SilverStripeOrm\Backend;
-use Heystack\Subsystem\Core\Storage\Traits\ParentReferenceTrait;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * An implementation of the ShippingHandlerInterface specific to 'country based' shipping cost calculation
@@ -85,8 +83,12 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
      * @param \Heystack\Subsystem\Core\State\State                        $stateService
      * @param \Monolog\Logger                                             $monologService
      */
-    public function __construct(LocaleServiceInterface $localeService, EventDispatcherInterface $eventService, State $stateService, Logger $monologService = null)
-    {
+    public function __construct(
+        LocaleServiceInterface $localeService,
+        EventDispatcherInterface $eventService,
+        State $stateService,
+        Logger $monologService = null
+    ) {
         $this->localeService = $localeService;
         $this->eventService = $eventService;
         $this->stateService = $stateService;
@@ -189,9 +191,7 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
     {
         $total = 0;
 
-        $countryClass = $this->localeService->getCountryClass();
-
-        if ($this->Country instanceof $countryClass) {
+        if ($this->Country instanceof CountryInterface) {
             $total = $this->Country->getShippingCost();
         }
 
@@ -209,7 +209,6 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
 
     public function getStorableData()
     {
-        
         return array(
             'id' => 'ShippingHandler',
             'parent' => true,
@@ -245,9 +244,7 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
 
     public function getStorableIdentifier()
     {
-
         return self::IDENTIFIER;
-
     }
 
     /**
@@ -256,9 +253,7 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
      */
     public function getSchemaName()
     {
-
         return 'Shipping';
-
     }
 
     public function getStorableBackendIdentifiers()
