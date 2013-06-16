@@ -49,12 +49,6 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
     const IDENTIFIER = 'shipping';
 
     /**
-     * Holds the data array
-     * @var array
-     */
-    protected $data = array();
-
-    /**
      * Holds the locale service object
      * @var \Heystack\Subsystem\Ecommerce\Locale\LocaleService
      */
