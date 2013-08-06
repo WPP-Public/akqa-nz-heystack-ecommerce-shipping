@@ -11,6 +11,8 @@
 namespace Heystack\Subsystem\Shipping\Types\Free;
 
 use Heystack\Subsystem\Core\Identifier\Identifier;
+use Heystack\Subsystem\Core\Interfaces\HasDataInterface;
+use Heystack\Subsystem\Core\Interfaces\HasStateServiceInterface;
 use Heystack\Subsystem\Shipping\Interfaces\ShippingHandlerInterface;
 use Heystack\Subsystem\Shipping\Traits\ShippingHandlerTrait;
 
@@ -36,7 +38,7 @@ use Heystack\Subsystem\Core\Storage\Traits\ParentReferenceTrait;
  * @author Glenn Bautista <glenn@heyday.co.nz>
  * @package Ecommerce-Shipping
  */
-class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \Serializable, ViewableDataInterface, StorableInterface
+class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \Serializable, ViewableDataInterface, StorableInterface, HasDataInterface, HasStateServiceInterface
 {
     use ShippingHandlerTrait;
     use TransactionModifierStateTrait;
@@ -259,6 +261,35 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
         return array(
             Backend::IDENTIFIER
         );
+    }
+
+    /**
+     * @param array $data
+     */
+    public function setData($data)
+    {
+        $this->data = $data;
+    }
+
+    /**
+     * @return array
+     */
+    public function getData()
+    {
+        return $this->data;
+    }
+
+    /**
+     * @param State $stateService
+     */
+    public function setStateService(State $stateService)
+    {
+        $this->stateService = $stateService;
+    }
+
+    public function getStateService()
+    {
+        return $this->stateService;
     }
 
 }
