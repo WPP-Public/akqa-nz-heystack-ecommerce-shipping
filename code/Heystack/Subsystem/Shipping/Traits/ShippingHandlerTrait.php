@@ -34,6 +34,10 @@ trait ShippingHandlerTrait
      */
     public function __set($name, $value)
     {
+        if ($name == 'data') {
+            return;
+        }
+
         if (in_array($name, $this->getDynamicMethods())) {
 
             $setterMethod = 'set' . $name;
@@ -67,6 +71,10 @@ trait ShippingHandlerTrait
      */
     public function __get($name)
     {
+        if ($name == 'data') {
+            return;
+        }
+
         if (in_array($name, $this->getDynamicMethods())) {
 
             $getterMethod = 'get' . $name;
