@@ -227,7 +227,7 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
                 'BillingAddressLine2' => $this->BillingAddressLine2,
                 'BillingCity' => $this->BillingCity,
                 'BillingPostcode' => $this->BillingPostcode,
-                'BillingCountry' => !is_null($this->BillingCountry) ? $this->localeService->getCountry($this->BillingCountry)->getName() : null,
+                'BillingCountry' => $this->BillingCountry,
                 'BillingTitle' => $this->BillingTitle,
                 'BillingFirstName' => $this->BillingFirstName,
                 'BillingSurname' => $this->BillingSurname,

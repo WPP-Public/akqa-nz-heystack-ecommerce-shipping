@@ -42,7 +42,7 @@ class Processor implements ProcessorInterface
      */
     public function process(\Controller $controller, $result = null)
     {
-        if ($controller->isAjax()) {
+        if ($controller->getRequest()->isAjax()) {
 
             $response = $controller->getResponse();
             $response->setStatusCode(200);
