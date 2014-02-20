@@ -100,7 +100,7 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
      */
     public function getDynamicMethods()
     {
-        return array(
+        return [
             'AddressLine1',
             'AddressLine2',
             'City',
@@ -123,12 +123,12 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
             'BillingSurname',
             'BillingEmail',
             'BillingPhone'
-        );
+        ];
     }
 
     public function getCastings()
     {
-        return array(
+        return [
             'AddressLine1' => 'Text',
             'AddressLine2' => 'Text',
             'City' => 'Text',
@@ -151,7 +151,7 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
             'BillingSurname' => 'Text',
             'BillingEmail' => 'Text',
             'BillingPhone' => 'Text'
-        );
+        ];
     }
 
     /**
@@ -205,10 +205,10 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
     public function getStorableData()
     {
 
-        return array(
+        return [
             'id' => 'ShippingHandler',
             'parent' => true,
-            'flat' => array(
+            'flat' => [
                 'ParentID' => $this->parentReference,
                 'AddressLine1' => $this->AddressLine1,
                 'AddressLine2' => $this->AddressLine2,
@@ -233,8 +233,8 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
                 'BillingSurname' => $this->BillingSurname,
                 'BillingEmail' => $this->BillingEmail,
                 'BillingPhone' => $this->BillingPhone,
-           )
-       );
+           ]
+       ];
 
     }
 
@@ -258,9 +258,9 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
 
     public function getStorableBackendIdentifiers()
     {
-        return array(
+        return [
             Backend::IDENTIFIER
-        );
+        ];
     }
 
     /**

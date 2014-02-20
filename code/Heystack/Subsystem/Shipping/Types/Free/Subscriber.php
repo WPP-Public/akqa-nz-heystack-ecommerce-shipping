@@ -68,9 +68,9 @@ class Subscriber implements EventSubscriberInterface
      */
     public static function getSubscribedEvents()
     {
-        return array(
-            Backend::IDENTIFIER . '.' . TransactionEvents::STORED      => array('onTransactionStored', 0)
-        );
+        return [
+            Backend::IDENTIFIER . '.' . TransactionEvents::STORED      => ['onTransactionStored', 0]
+        ];
     }
 
     /**
