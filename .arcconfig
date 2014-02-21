@@ -1,4 +1,7 @@
 {
-  "project_id" : "Ecommerce Shipping",
-  "conduit_uri" : "https://phabricator.heyday.net.nz/"
+  "project_id": "Ecommerce Shipping",
+  "conduit_uri": "https://phabricator.heyday.net.nz/",
+  "lint.engine.single.linter": "ArcanistPhpcsLinter",
+  "lint.engine": "ArcanistSingleLintEngine",
+  "lint.phpcs.standard": "PSR2"
 }
