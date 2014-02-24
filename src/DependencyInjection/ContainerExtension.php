@@ -8,13 +8,13 @@
 /**
  * Shipping namespace
  */
-namespace Heystack\Subsystem\Shipping\DependencyInjection;
+namespace Heystack\Shipping\DependencyInjection;
 
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
-use Heystack\Subsystem\Shipping\Config\ContainerConfig;
+use Heystack\Shipping\Config\ContainerConfig;
 use Symfony\Component\Config\Definition\Processor;
 
 

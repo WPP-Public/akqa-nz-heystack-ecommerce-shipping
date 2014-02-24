@@ -8,7 +8,7 @@
 /**
  * Shipping namespace
  */
-namespace Heystack\Subsystem\Shipping;
+namespace Heystack\Shipping;
 
 /**
  * Holds constants corresponding to the services defined in the services.yml file

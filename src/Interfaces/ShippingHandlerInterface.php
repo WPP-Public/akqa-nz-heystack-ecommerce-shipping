@@ -8,9 +8,9 @@
 /**
  * Interfaces namespace
  */
-namespace Heystack\Subsystem\Shipping\Interfaces;
+namespace Heystack\Shipping\Interfaces;
 
-use Heystack\Subsystem\Ecommerce\Transaction\Interfaces\TransactionModifierInterface;
+use Heystack\Ecommerce\Transaction\Interfaces\TransactionModifierInterface;
 
 /**
  * Defines what methods & functions a ShippingHandler Class needs to implement

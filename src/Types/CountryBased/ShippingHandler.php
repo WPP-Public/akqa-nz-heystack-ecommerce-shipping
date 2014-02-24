@@ -8,24 +8,24 @@
 /**
  * CountryBased namespace
  */
-namespace Heystack\Subsystem\Shipping\Types\CountryBased;
+namespace Heystack\Shipping\Types\CountryBased;
 
-use Heystack\Subsystem\Core\Identifier\Identifier;
-use Heystack\Subsystem\Core\Interfaces\HasDataInterface;
-use Heystack\Subsystem\Core\Interfaces\HasStateServiceInterface;
-use Heystack\Subsystem\Core\State\State;
-use Heystack\Subsystem\Core\State\StateableInterface;
-use Heystack\Subsystem\Core\Storage\Backends\SilverStripeOrm\Backend;
-use Heystack\Subsystem\Core\Storage\StorableInterface;
-use Heystack\Subsystem\Core\Storage\Traits\ParentReferenceTrait;
-use Heystack\Subsystem\Core\ViewableData\ViewableDataInterface;
-use Heystack\Subsystem\Ecommerce\Locale\Interfaces\LocaleServiceInterface;
-use Heystack\Subsystem\Ecommerce\Transaction\Traits\TransactionModifierSerializeTrait;
-use Heystack\Subsystem\Ecommerce\Transaction\Traits\TransactionModifierStateTrait;
-use Heystack\Subsystem\Ecommerce\Transaction\TransactionModifierTypes;
-use Heystack\Subsystem\Shipping\Interfaces\ShippingHandlerInterface;
-use Heystack\Subsystem\Shipping\Traits\ShippingHandlerTrait;
-use Heystack\Subsystem\Shipping\Types\CountryBased\Interfaces\CountryInterface;
+use Heystack\Core\Identifier\Identifier;
+use Heystack\Core\Interfaces\HasDataInterface;
+use Heystack\Core\Interfaces\HasStateServiceInterface;
+use Heystack\Core\State\State;
+use Heystack\Core\State\StateableInterface;
+use Heystack\Core\Storage\Backends\SilverStripeOrm\Backend;
+use Heystack\Core\Storage\StorableInterface;
+use Heystack\Core\Storage\Traits\ParentReferenceTrait;
+use Heystack\Core\ViewableData\ViewableDataInterface;
+use Heystack\Ecommerce\Locale\Interfaces\LocaleServiceInterface;
+use Heystack\Ecommerce\Transaction\Traits\TransactionModifierSerializeTrait;
+use Heystack\Ecommerce\Transaction\Traits\TransactionModifierStateTrait;
+use Heystack\Ecommerce\Transaction\TransactionModifierTypes;
+use Heystack\Shipping\Interfaces\ShippingHandlerInterface;
+use Heystack\Shipping\Traits\ShippingHandlerTrait;
+use Heystack\Shipping\Types\CountryBased\Interfaces\CountryInterface;
 use Monolog\Logger;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -50,7 +50,7 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
 
     /**
      * Holds the locale service object
-     * @var \Heystack\Subsystem\Ecommerce\Locale\LocaleService
+     * @var \Heystack\Ecommerce\Locale\LocaleService
      */
     protected $localeService;
 
@@ -62,7 +62,7 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
 
     /**
      * Holds the state service object
-     * @var \Heystack\Subsystem\Core\State\State
+     * @var \Heystack\Core\State\State
      */
     protected $stateService;
 
@@ -76,7 +76,7 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
      * Creates the ShippingHandler object
      * @param string                                                      $countryClass
      * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventService
-     * @param \Heystack\Subsystem\Core\State\State                        $stateService
+     * @param \Heystack\Core\State\State                        $stateService
      * @param \Monolog\Logger                                             $monologService
      */
     public function __construct(
@@ -164,7 +164,7 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
     /**
      * Uses the identifier to retrive the country object from the cache
      * @param  type                                                                  $identifier
-     * @return \Heystack\Subsystem\Shipping\CountryBased\Interfaces\CountryInterface
+     * @return \Heystack\Shipping\CountryBased\Interfaces\CountryInterface
      */
     public function getCountry()
     {
@@ -173,7 +173,7 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
 
     /**
      * Returns a unique identifier for use in the Transaction
-     * @return \Heystack\Subsystem\Core\Identifier\Identifier
+     * @return \Heystack\Core\Identifier\Identifier
      */
     public function getIdentifier()
     {

@@ -8,9 +8,9 @@
 /**
  * Interfaces namespace
  */
-namespace Heystack\Subsystem\Shipping\Types\CountryBased\Interfaces;
+namespace Heystack\Shipping\Types\CountryBased\Interfaces;
 
-use Heystack\Subsystem\Ecommerce\Locale\Interfaces\CountryInterface as CountryBaseInterface;
+use Heystack\Ecommerce\Locale\Interfaces\CountryInterface as CountryBaseInterface;
 
 /**
  * Defines what methods/functions a Country class needs to implement

@@ -1,6 +1,6 @@
 <?php
 
-namespace Heystack\Subsystem\Shipping\Tests;
+namespace Heystack\Shipping\Tests;
 
 class ShippingTest extends \PHPUnit_Framework_TestCase
 {

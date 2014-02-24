@@ -1,13 +1,13 @@
 <?php
 
-namespace Heystack\Subsystem\Shipping\DependencyInjection\CompilerPass;
+namespace Heystack\Shipping\DependencyInjection\CompilerPass;
 
-use Heystack\Subsystem\Core\DependencyInjection\CompilerPass\HasService;
-use Heystack\Subsystem\Shipping\Services;
+use Heystack\Core\DependencyInjection\CompilerPass\HasService;
+use Heystack\Shipping\Services;
 
 /**
  * Class HasShippingHandler
- * @package Heystack\Subsystem\Shipping\DependencyInjection\CompilerPass
+ * @package Heystack\Shipping\DependencyInjection\CompilerPass
  */
 class HasShippingHandler extends HasService
 {

@@ -8,7 +8,7 @@
 /**
  * Traits namespace
  */
-namespace Heystack\Subsystem\Shipping\Traits;
+namespace Heystack\Shipping\Traits;
 
 /**
  * Provides the magic setter/getter functions for a ShippingHandler class.

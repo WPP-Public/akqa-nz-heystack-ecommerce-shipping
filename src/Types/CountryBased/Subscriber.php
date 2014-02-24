@@ -8,21 +8,21 @@
 /**
  * CountryBased namespace
  */
-namespace Heystack\Subsystem\Shipping\Types\CountryBased;
+namespace Heystack\Shipping\Types\CountryBased;
 
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-use Heystack\Subsystem\Ecommerce\Currency\Events as CurrencyEvents;
-use Heystack\Subsystem\Ecommerce\Locale\Events as LocaleEvents;
-use Heystack\Subsystem\Ecommerce\Transaction\Events as TransactionEvents;
+use Heystack\Ecommerce\Currency\Events as CurrencyEvents;
+use Heystack\Ecommerce\Locale\Events as LocaleEvents;
+use Heystack\Ecommerce\Transaction\Events as TransactionEvents;
 
-use Heystack\Subsystem\Shipping\Interfaces\ShippingHandlerInterface;
-use Heystack\Subsystem\Core\Storage\Storage;
-use Heystack\Subsystem\Core\Storage\Event as StorageEvent;
+use Heystack\Shipping\Interfaces\ShippingHandlerInterface;
+use Heystack\Core\Storage\Storage;
+use Heystack\Core\Storage\Event as StorageEvent;
 
-use Heystack\Subsystem\Core\Storage\Backends\SilverStripeOrm\Backend;
-use Heystack\Subsystem\Shipping\Events;
+use Heystack\Core\Storage\Backends\SilverStripeOrm\Backend;
+use Heystack\Shipping\Events;
 /**
  * Handles both subscribing to events and acting on those events needed for ShippingHandler to work properly
  *
@@ -41,21 +41,21 @@ class Subscriber implements EventSubscriberInterface
 
     /**
      * Holds the ShippingHandler Service
-     * @var \Heystack\Subsystem\Shipping\Interfaces\ShippingHandlerInterface
+     * @var \Heystack\Shipping\Interfaces\ShippingHandlerInterface
      */
     protected $shippingService;
 
     /**
      * Holds the Storage Service
-     * @var \Heystack\Subsystem\Core\Storage\Storage
+     * @var \Heystack\Core\Storage\Storage
      */
     protected $storageService;
 
     /**
      * Creates the ShippingHandler Subscriber object
      * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface      $eventService
-     * @param \Heystack\Subsystem\Shipping\Interfaces\ShippingHandlerInterface $shippingService
-     * @param \Heystack\Subsystem\Core\Storage\Storage                         $storageService
+     * @param \Heystack\Shipping\Interfaces\ShippingHandlerInterface $shippingService
+     * @param \Heystack\Core\Storage\Storage                         $storageService
      */
     public function __construct(EventDispatcherInterface $eventService, ShippingHandlerInterface $shippingService,  Storage $storageService)
     {
@@ -89,7 +89,7 @@ class Subscriber implements EventSubscriberInterface
     /**
      * Called after the Transaction is stored.
      * Tells the storage service to store all the information held in the ShippingHandler
-     * @param \Heystack\Subsystem\Core\Storage\Event $event
+     * @param \Heystack\Core\Storage\Event $event
      */
     public function onTransactionStored(StorageEvent $event)
     {

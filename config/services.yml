@@ -1,8 +1,8 @@
 parameters:
-  shipping_service.class : Heystack\Subsystem\Shipping\Types\CountryBased\ShippingHandler
-  shipping_input_processor.class : Heystack\Subsystem\Shipping\Input\Processor
-  shipping_output_processor.class : Heystack\Subsystem\Shipping\Output\Processor
-  shipping_service_subscriber.class: Heystack\Subsystem\Shipping\Types\CountryBased\Subscriber
+  shipping_service.class : Heystack\Shipping\Types\CountryBased\ShippingHandler
+  shipping_input_processor.class : Heystack\Shipping\Input\Processor
+  shipping_output_processor.class : Heystack\Shipping\Output\Processor
+  shipping_service_subscriber.class: Heystack\Shipping\Types\CountryBased\Subscriber
 
 services:
   

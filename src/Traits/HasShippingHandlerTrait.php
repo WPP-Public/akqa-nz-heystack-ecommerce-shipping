@@ -1,17 +1,17 @@
 <?php
 
-namespace Heystack\Subsystem\Shipping\Traits;
+namespace Heystack\Shipping\Traits;
 
-use Heystack\Subsystem\Shipping\Interfaces\ShippingHandlerInterface;
+use Heystack\Shipping\Interfaces\ShippingHandlerInterface;
 
 /**
  * Class HasShippingHandlerTrait
- * @package Heystack\Subsystem\Shipping\Traits
+ * @package Heystack\Shipping\Traits
  */
 trait HasShippingHandlerTrait
 {
     /**
-     * @var \Heystack\Subsystem\Shipping\Interfaces\ShippingHandlerInterface
+     * @var \Heystack\Shipping\Interfaces\ShippingHandlerInterface
      */
     protected $shippingHandler;
 
@@ -24,7 +24,7 @@ trait HasShippingHandlerTrait
     }
 
     /**
-     * @return \Heystack\Subsystem\Shipping\Interfaces\ShippingHandlerInterface
+     * @return \Heystack\Shipping\Interfaces\ShippingHandlerInterface
      */
     public function getShippingHandler()
     {

@@ -8,10 +8,10 @@
 /**
  * Input namespace
  */
-namespace Heystack\Subsystem\Shipping\Input;
+namespace Heystack\Shipping\Input;
 
-use Heystack\Subsystem\Core\Input\ProcessorInterface;
-use Heystack\Subsystem\Shipping\Interfaces\ShippingHandlerInterface;
+use Heystack\Core\Input\ProcessorInterface;
+use Heystack\Shipping\Interfaces\ShippingHandlerInterface;
 
 /**
  * Input processor for shipping
@@ -28,13 +28,13 @@ class Processor implements ProcessorInterface
 
     /**
      * Holds the shipping handler/service object
-     * @var \Heystack\Subsystem\Shipping\Interfaces\ShippingHandlerInterface
+     * @var \Heystack\Shipping\Interfaces\ShippingHandlerInterface
      */
     protected $shippingService;
 
     /**
      * Creates the Shipping Input Processor
-     * @param \Heystack\Subsystem\Shipping\Interfaces\ShippingHandlerInterface $shippingService
+     * @param \Heystack\Shipping\Interfaces\ShippingHandlerInterface $shippingService
      */
     public function __construct(ShippingHandlerInterface $shippingService)
     {
@@ -43,7 +43,7 @@ class Processor implements ProcessorInterface
 
     /**
      * Returns the Processor's identifier
-     * @return \Heystack\Subsystem\Core\Identifier\Identifier
+     * @return \Heystack\Core\Identifier\Identifier
      */
     public function getIdentifier()
     {

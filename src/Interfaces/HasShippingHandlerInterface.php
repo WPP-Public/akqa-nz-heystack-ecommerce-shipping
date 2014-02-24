@@ -1,21 +1,21 @@
 <?php
 
-namespace Heystack\Subsystem\Shipping\Interfaces;
+namespace Heystack\Shipping\Interfaces;
 
 /**
  * Interface HasShippingHandlerInterface
- * @package Heystack\Subsystem\Shipping\Interfaces
+ * @package Heystack\Shipping\Interfaces
  */
 interface HasShippingHandlerInterface
 {
     /**
-     * @param \Heystack\Subsystem\Shipping\Interfaces\ShippingHandlerInterface $shippingHandler
+     * @param \Heystack\Shipping\Interfaces\ShippingHandlerInterface $shippingHandler
      * @return mixed
      */
     public function setShippingHandler(ShippingHandlerInterface $shippingHandler);
 
     /**
-     * @return \Heystack\Subsystem\Shipping\Interfaces\ShippingHandlerInterface
+     * @return \Heystack\Shipping\Interfaces\ShippingHandlerInterface
      */
     public function getShippingHandler();
 }

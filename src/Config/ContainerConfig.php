@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Heystack\Subsystem\Shipping\Config;
+namespace Heystack\Shipping\Config;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
@@ -9,7 +9,7 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 /**
  * Class ContainerConfig
  * @author Cam Spiers <cameron@heyday.co.nz>
- * @package Heystack\Subsystem\Shipping\Config
+ * @package Heystack\Shipping\Config
  */
 class ContainerConfig implements ConfigurationInterface
 {

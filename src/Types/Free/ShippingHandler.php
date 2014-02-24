@@ -8,28 +8,28 @@
 /**
  * Free namespace
  */
-namespace Heystack\Subsystem\Shipping\Types\Free;
+namespace Heystack\Shipping\Types\Free;
 
-use Heystack\Subsystem\Core\Identifier\Identifier;
-use Heystack\Subsystem\Core\Interfaces\HasDataInterface;
-use Heystack\Subsystem\Core\Interfaces\HasStateServiceInterface;
-use Heystack\Subsystem\Shipping\Interfaces\ShippingHandlerInterface;
-use Heystack\Subsystem\Shipping\Traits\ShippingHandlerTrait;
+use Heystack\Core\Identifier\Identifier;
+use Heystack\Core\Interfaces\HasDataInterface;
+use Heystack\Core\Interfaces\HasStateServiceInterface;
+use Heystack\Shipping\Interfaces\ShippingHandlerInterface;
+use Heystack\Shipping\Traits\ShippingHandlerTrait;
 
-use Heystack\Subsystem\Ecommerce\Transaction\TransactionModifierTypes;
-use Heystack\Subsystem\Ecommerce\Transaction\Traits\TransactionModifierStateTrait;
-use Heystack\Subsystem\Ecommerce\Transaction\Traits\TransactionModifierSerializeTrait;
-use Heystack\Subsystem\Ecommerce\Locale\LocaleService;
+use Heystack\Ecommerce\Transaction\TransactionModifierTypes;
+use Heystack\Ecommerce\Transaction\Traits\TransactionModifierStateTrait;
+use Heystack\Ecommerce\Transaction\Traits\TransactionModifierSerializeTrait;
+use Heystack\Ecommerce\Locale\LocaleService;
 
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Monolog\Logger;
 
-use Heystack\Subsystem\Core\State\StateableInterface;
-use Heystack\Subsystem\Core\State\State;
-use Heystack\Subsystem\Core\ViewableData\ViewableDataInterface;
-use Heystack\Subsystem\Core\Storage\StorableInterface;
-use Heystack\Subsystem\Core\Storage\Backends\SilverStripeOrm\Backend;
-use Heystack\Subsystem\Core\Storage\Traits\ParentReferenceTrait;
+use Heystack\Core\State\StateableInterface;
+use Heystack\Core\State\State;
+use Heystack\Core\ViewableData\ViewableDataInterface;
+use Heystack\Core\Storage\StorableInterface;
+use Heystack\Core\Storage\Backends\SilverStripeOrm\Backend;
+use Heystack\Core\Storage\Traits\ParentReferenceTrait;
 
 /**
  * An implementation of the ShippingHandlerInterface specific to 'free' shipping cost calculation
@@ -52,7 +52,7 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
 
     /**
      * Holds the locale service object
-     * @var \Heystack\Subsystem\Ecommerce\Locale\LocaleService
+     * @var \Heystack\Ecommerce\Locale\LocaleService
      */
     protected $localeService;
 
@@ -70,7 +70,7 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
 
     /**
      * Holds the state service object
-     * @var \Heystack\Subsystem\Core\State\State
+     * @var \Heystack\Core\State\State
      */
     protected $stateService;
 
@@ -83,7 +83,7 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
     /**
      * Creates the ShippingHandler object
      * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventService
-     * @param \Heystack\Subsystem\Core\State\State                        $stateService
+     * @param \Heystack\Core\State\State                        $stateService
      * @param \Monolog\Logger                                             $monologService
      */
     public function __construct(LocaleService $localeService, EventDispatcherInterface $eventService, State $stateService, Logger $monologService = null)
@@ -167,7 +167,7 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
     /**
      * Retrive the country object from the cache
      * @param  type                                                                  $identifier
-     * @return \Heystack\Subsystem\Shipping\CountryBased\Interfaces\CountryInterface
+     * @return \Heystack\Shipping\CountryBased\Interfaces\CountryInterface
      */
     public function getCountry()
     {
@@ -176,7 +176,7 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
 
     /**
      * Returns a unique identifier for use in the Transaction
-     * @return \Heystack\Subsystem\Core\Identifier\Identifier
+     * @return \Heystack\Core\Identifier\Identifier
      */
     public function getIdentifier()
     {
