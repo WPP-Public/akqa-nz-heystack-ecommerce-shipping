@@ -10,6 +10,8 @@
  */
 namespace Heystack\Shipping\Traits;
 
+use Heystack\Core\Interfaces\HasLoggerServiceInterface;
+
 /**
  * Provides the magic setter/getter functions for a ShippingHandler class.
  *
@@ -29,7 +31,7 @@ trait ShippingHandlerTrait
      * Magic setter function that uses the data array to store a property's data.
      *
      * @param  string     $name
-     * @param  type       $value
+     * @param  mixed       $value
      * @throws \Exception
      */
     public function __set($name, $value)
@@ -49,9 +51,11 @@ trait ShippingHandlerTrait
             }
 
         } else {
-
-            if (property_exists($this, 'monologService') && isset($this->monologService)) {
-                $this->monologService->err($name . ' is not a valid Shipping property');
+            
+            if ($this instanceof HasLoggerServiceInterface) {
+                if ($logger = $this->getLoggerService()) {
+                    $logger->error($name . ' is not a valid Shipping property');
+                }
             }
 
             throw new \Exception($name . ' is not a valid Shipping property');
@@ -61,8 +65,8 @@ trait ShippingHandlerTrait
 
     /**
      * Magic getter function that returns a property from the data array
-     * @param  string     $name
-     * @return type
+     * @param  string $name
+     * @return mixed
      * @throws \Exception
      */
     public function __get($name)
@@ -84,8 +88,10 @@ trait ShippingHandlerTrait
 
         } else {
 
-            if (property_exists($this, 'monologService') && isset($this->monologService)) {
-                $this->monologService->err($name . ' is not a valid Shipping property');
+            if ($this instanceof HasLoggerServiceInterface) {
+                if ($logger = $this->getLoggerService()) {
+                    $logger->error($name . ' is not a valid Shipping property');
+                }
             }
 
             throw new \Exception($name . ' is not a valid Shipping property');

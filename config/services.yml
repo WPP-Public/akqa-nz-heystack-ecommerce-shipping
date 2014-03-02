@@ -8,12 +8,13 @@ services:
   
   shipping_service:
     class: %shipping_service.class%
-    arguments: [ @locale_service, @event_dispatcher, @state, @monolog ]
+    arguments: [ @locale_service, @event_dispatcher, @state ]
     calls:
       - [ restoreState ]
     tags:
       - { name: ss_orm_backend.data_provider }
       - { name: transaction.modifier }
+      - { name: has.logger }
       
   shipping_input_processor:
     class: %shipping_input_processor.class%
