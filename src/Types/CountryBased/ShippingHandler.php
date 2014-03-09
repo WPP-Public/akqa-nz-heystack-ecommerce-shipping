@@ -11,19 +11,20 @@
 namespace Heystack\Shipping\Types\CountryBased;
 
 use Heystack\Core\Identifier\Identifier;
+use Heystack\Core\Identifier\IdentifierInterface;
 use Heystack\Core\Interfaces\HasDataInterface;
 use Heystack\Core\Interfaces\HasEventServiceInterface;
 use Heystack\Core\Interfaces\HasLoggerServiceInterface;
 use Heystack\Core\Interfaces\HasStateServiceInterface;
 use Heystack\Core\State\State;
-use Heystack\Core\State\StateableInterface;
 use Heystack\Core\Storage\Backends\SilverStripeOrm\Backend;
-use Heystack\Core\Storage\StorableInterface;
 use Heystack\Core\Storage\Traits\ParentReferenceTrait;
 use Heystack\Core\Traits\HasEventServiceTrait;
 use Heystack\Core\Traits\HasLoggerServiceTrait;
 use Heystack\Core\Traits\HasStateServiceTrait;
 use Heystack\Core\ViewableData\ViewableDataInterface;
+use Heystack\Ecommerce\Currency\Interfaces\CurrencyServiceInterface;
+use Heystack\Ecommerce\Currency\Traits\HasCurrencyServiceTrait;
 use Heystack\Ecommerce\Locale\Interfaces\HasLocaleServiceInterface;
 use Heystack\Ecommerce\Locale\Interfaces\LocaleServiceInterface;
 use Heystack\Ecommerce\Locale\Traits\HasLocaleServiceTrait;
@@ -45,10 +46,8 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 class ShippingHandler
     implements
         ShippingHandlerInterface,
-        StateableInterface,
         \Serializable,
         ViewableDataInterface,
-        StorableInterface,
         HasDataInterface,
         HasStateServiceInterface,
         HasEventServiceInterface,
@@ -63,6 +62,7 @@ class ShippingHandler
     use HasEventServiceTrait;
     use HasLocaleServiceTrait;
     use HasLoggerServiceTrait;
+    use HasCurrencyServiceTrait;
 
     /**
      * Holds the key used for storing state
@@ -74,15 +74,18 @@ class ShippingHandler
      * @param LocaleServiceInterface $localeService
      * @param EventDispatcherInterface $eventService
      * @param State $stateService
+     * @param CurrencyServiceInterface $currencyService
      */
     public function __construct(
         LocaleServiceInterface $localeService,
         EventDispatcherInterface $eventService,
-        State $stateService
+        State $stateService,
+        CurrencyServiceInterface $currencyService
     ) {
         $this->localeService = $localeService;
         $this->eventService = $eventService;
         $this->stateService = $stateService;
+        $this->currencyService = $currencyService;
     }
 
     /**
@@ -148,16 +151,16 @@ class ShippingHandler
     /**
      * Overrides the magic setter function for the Country field. Uses the cache for
      * retrieval and storage of the Country object
-     * @param string $identifier
+     * @param \Heystack\Core\Identifier\IdentifierInterface $identifier
      */
-    public function setCountry($identifier)
+    public function setCountry(IdentifierInterface $identifier)
     {
         $this->localeService->setActiveCountry($identifier);
     }
 
     /**
      * Uses the identifier to retrive the country object from the cache
-     * @return mixed
+     * @return \Heystack\Ecommerce\Locale\Interfaces\CountryInterface
      */
     public function getCountry()
     {
@@ -175,15 +178,16 @@ class ShippingHandler
 
     /**
      * Returns the total value of the TransactionModifier for use in the Transaction
+     * @return \SebastianBergmann\Money\Money
      */
     public function getTotal()
     {
-        $total = 0;
-
         $country = $this->getCountry();
 
         if ($country instanceof CountryInterface) {
             $total = $country->getShippingCost();
+        } else {
+            $total = $this->currencyService->getZeroMoney();
         }
 
         return $total;
@@ -192,12 +196,16 @@ class ShippingHandler
     /**
      * Indicates the type of amount the modifier will return
      * Must return a constant from TransactionModifierTypes
+     * @return string
      */
     public function getType()
     {
         return TransactionModifierTypes::CHARGEABLE;
     }
 
+    /**
+     * @return array
+     */
     public function getStorableData()
     {
         return [
@@ -247,6 +255,9 @@ class ShippingHandler
         return 'Shipping';
     }
 
+    /**
+     * @return array
+     */
     public function getStorableBackendIdentifiers()
     {
         return [
@@ -260,7 +271,9 @@ class ShippingHandler
      */
     public function setData($data)
     {
-        $this->data = $data;
+        if ($data) {
+            $this->data = $data;
+        }
     }
 
     /**

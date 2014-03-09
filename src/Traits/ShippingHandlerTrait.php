@@ -22,6 +22,11 @@ use Heystack\Core\Interfaces\HasLoggerServiceInterface;
 trait ShippingHandlerTrait
 {
     /**
+     * @var array
+     */
+    protected $data = [];
+
+    /**
      * Returns an array of field names that need to managed by the shipping subsystem.
      * @return array
      */

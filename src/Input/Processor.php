@@ -10,8 +10,10 @@
  */
 namespace Heystack\Shipping\Input;
 
+use Heystack\Core\Identifier\Identifier;
 use Heystack\Core\Input\ProcessorInterface;
 use Heystack\Shipping\Interfaces\ShippingHandlerInterface;
+use Heystack\Shipping\Traits\HasShippingHandlerTrait;
 
 /**
  * Input processor for shipping
@@ -25,20 +27,15 @@ use Heystack\Shipping\Interfaces\ShippingHandlerInterface;
  */
 class Processor implements ProcessorInterface
 {
-
-    /**
-     * Holds the shipping handler/service object
-     * @var \Heystack\Shipping\Interfaces\ShippingHandlerInterface
-     */
-    protected $shippingService;
+    use HasShippingHandlerTrait;
 
     /**
      * Creates the Shipping Input Processor
-     * @param \Heystack\Shipping\Interfaces\ShippingHandlerInterface $shippingService
+     * @param \Heystack\Shipping\Interfaces\ShippingHandlerInterface $shippingHandler
      */
-    public function __construct(ShippingHandlerInterface $shippingService)
+    public function __construct(ShippingHandlerInterface $shippingHandler)
     {
-        $this->shippingService = $shippingService;
+        $this->shippingHandler = $shippingHandler;
     }
 
     /**
@@ -47,7 +44,7 @@ class Processor implements ProcessorInterface
      */
     public function getIdentifier()
     {
-        return $this->shippingService->getIdentifier();
+        return $this->shippingHandler->getIdentifier();
     }
 
     /**
@@ -58,90 +55,80 @@ class Processor implements ProcessorInterface
      */
     public function process(\SS_HTTPRequest $request)
     {
-
         $data = $request->requestVars();
 
-        $shippingFields = $this->shippingService->getDynamicMethods();
-
+        $shippingFields = $this->shippingHandler->getDynamicMethods();
 
         // populate defaults
-
         foreach ($data as $key => $value) {
-
             if (in_array($key, $shippingFields)) {
-
-                $this->shippingService->$key = $value;
-
+                if ($key === 'Country') {
+                    $this->shippingHandler->setCountry(new Identifier($value));
+                } else {
+                    $this->shippingHandler->$key = $value;
+                }
             }
-
         }
 
         // errors
         $errors = [];
 
-        {
+        if (!isset($data['BillingFirstName']) || !$data['BillingFirstName']) {
 
-            if (!isset($data['BillingFirstName']) || !$data['BillingFirstName']) {
+            $errors['BillingFirstName_Error'] = ['Error' => 'Please enter a first name.'];
 
-                $errors['BillingFirstName_Error'] = ['Error' => 'Please enter a first name.'];
+        }
 
-            }
+        if (!isset($data['BillingSurname']) || !$data['BillingSurname']) {
 
-            if (!isset($data['BillingSurname']) || !$data['BillingSurname']) {
+            $errors['BillingSurname_Error'] = ['Error' => 'Please enter a surname.'];
 
-                $errors['BillingSurname_Error'] = ['Error' => 'Please enter a surname.'];
+        }
 
-            }
+        if (!isset($data['BillingEmail']) || !filter_var($data['BillingEmail'], FILTER_VALIDATE_EMAIL)) {
 
-            if (!isset($data['BillingEmail']) || !filter_var($data['BillingEmail'], FILTER_VALIDATE_EMAIL)) {
+            $errors['BillingEmail_Error'] = ['Error' => 'Please enter an email address.'];
 
-                $errors['BillingEmail_Error'] = ['Error' => 'Please enter an email address.'];
+        }
 
-            }
+        if (!isset($data['BillingAddressLine1']) || !$data['BillingAddressLine1']) {
 
-            if (!isset($data['BillingAddressLine1']) || !$data['BillingAddressLine1']) {
+            $errors['BillingAddressLine1_Error'] = ['Error' => 'Please enter an address.'];
 
-                $errors['BillingAddressLine1_Error'] = ['Error' => 'Please enter an address.'];
+        }
 
-            }
+        if (!isset($data['BillingCity']) || !$data['BillingAddressLine1']) {
 
-            if (!isset($data['BillingCity']) || !$data['BillingAddressLine1']) {
+            $errors['BillingCity_Error'] = ['Error' => 'Please enter a city.'];
 
-                $errors['BillingCity_Error'] = ['Error' => 'Please enter a city.'];
+        }
 
-            }
+        if (!isset($data['BillingPostcode']) || !$data['BillingPostcode']) {
 
-            if (!isset($data['BillingPostcode']) || !$data['BillingPostcode']) {
+            $errors['BillingPostcode_Error'] = ['Error' => 'Please enter a postcode.'];
 
-                $errors['BillingPostcode_Error'] = ['Error' => 'Please enter a postcode.'];
+        }
 
-            }
+        if (!isset($data['BillingCountry']) || !$data['BillingCountry']) {
 
-            if (!isset($data['BillingCountry']) || !$data['BillingCountry']) {
-
-                $errors['BillingCountry_Error'] = ['Error' => 'Please select a country.'];
-
-            }
+            $errors['BillingCountry_Error'] = ['Error' => 'Please select a country.'];
 
         }
 
         // if the delivery is billing, populate those fields that we can
         if ($data['delivery'] == 'billing') {
 
-            $this->shippingService->BillingAsShipping = true;
-            $this->shippingService->BillingFirstName = $data['BillingFirstName'];
-            $this->shippingService->BillingSurname = $data['BillingSurname'];
-            $this->shippingService->BillingEmail = $data['BillingEmail'];
+            $this->shippingHandler->BillingAsShipping = true;
 
-            $this->shippingService->FirstName = $data['BillingFirstName'];
-            $this->shippingService->Surname = $data['BillingSurname'];
-            $this->shippingService->Email = $data['BillingEmail'];
+            $this->shippingHandler->FirstName = $data['BillingFirstName'];
+            $this->shippingHandler->Surname = $data['BillingSurname'];
+            $this->shippingHandler->Email = $data['BillingEmail'];
 
-            $this->shippingService->AddressLine1 = $data['BillingAddressLine1'];
-            $this->shippingService->AddressLine2 = $data['BillingAddressLine2'];
-            $this->shippingService->City = $data['BillingCity'];
-            $this->shippingService->Postcode = $data['BillingPostcode'];
-            $this->shippingService->Country = $data['BillingCountry'];
+            $this->shippingHandler->AddressLine1 = $data['BillingAddressLine1'];
+            $this->shippingHandler->AddressLine2 = $data['BillingAddressLine2'];
+            $this->shippingHandler->City = $data['BillingCity'];
+            $this->shippingHandler->Postcode = $data['BillingPostcode'];
+            $this->shippingHandler->Country = $data['BillingCountry'];
 
 
         } else {
@@ -193,10 +180,10 @@ class Processor implements ProcessorInterface
 
             }
 
-            $this->shippingService->BillingAsShipping = false;
-            $this->shippingService->FirstName = $data['BillingFirstName'];
-            $this->shippingService->Surname = $data['BillingSurname'];
-            $this->shippingService->Email = $data['BillingEmail'];
+            $this->shippingHandler->BillingAsShipping = false;
+            $this->shippingHandler->FirstName = $data['BillingFirstName'];
+            $this->shippingHandler->Surname = $data['BillingSurname'];
+            $this->shippingHandler->Email = $data['BillingEmail'];
 
         }
 
@@ -211,7 +198,7 @@ class Processor implements ProcessorInterface
             );
         }
 
-        $this->shippingService->saveState();
+        $this->shippingHandler->saveState();
 
         return [
             'success' => true

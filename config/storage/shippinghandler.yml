@@ -1,4 +1,3 @@
-data_provider_id: shippinghandler
 id: Shipping
 flat:
   AddressLine1: Varchar(255)
@@ -23,7 +22,6 @@ flat:
   BillingPhone: Varchar(255)
   BillingAsShipping: Boolean
   Total: Decimal(10,2)
-related:
 parent:
   Parent: +Transaction
 children: -

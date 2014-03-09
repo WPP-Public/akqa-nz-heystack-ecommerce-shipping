@@ -23,6 +23,7 @@ interface CountryInterface extends CountryBaseInterface
 {
     /**
      * Returns the cost of shipping to the country in question
+     * @return \SebastianBergmann\Money\Money
      */
     public function getShippingCost();
 }

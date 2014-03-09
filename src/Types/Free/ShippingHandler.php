@@ -11,25 +11,29 @@
 namespace Heystack\Shipping\Types\Free;
 
 use Heystack\Core\Identifier\Identifier;
+use Heystack\Core\Identifier\IdentifierInterface;
 use Heystack\Core\Interfaces\HasDataInterface;
 use Heystack\Core\Interfaces\HasStateServiceInterface;
+use Heystack\Core\State\State;
+use Heystack\Core\State\StateableInterface;
+use Heystack\Core\Storage\Backends\SilverStripeOrm\Backend;
+use Heystack\Core\Storage\StorableInterface;
+use Heystack\Core\Storage\Traits\ParentReferenceTrait;
+use Heystack\Core\Traits\HasEventServiceTrait;
+use Heystack\Core\Traits\HasLoggerServiceTrait;
+use Heystack\Core\Traits\HasStateServiceTrait;
+use Heystack\Core\ViewableData\ViewableDataInterface;
+use Heystack\Ecommerce\Currency\Interfaces\CurrencyServiceInterface;
+use Heystack\Ecommerce\Currency\Traits\HasCurrencyServiceTrait;
+use Heystack\Ecommerce\Locale\LocaleService;
+use Heystack\Ecommerce\Locale\Traits\HasLocaleServiceTrait;
+use Heystack\Ecommerce\Transaction\Traits\TransactionModifierSerializeTrait;
+use Heystack\Ecommerce\Transaction\Traits\TransactionModifierStateTrait;
+use Heystack\Ecommerce\Transaction\TransactionModifierTypes;
 use Heystack\Shipping\Interfaces\ShippingHandlerInterface;
 use Heystack\Shipping\Traits\ShippingHandlerTrait;
-
-use Heystack\Ecommerce\Transaction\TransactionModifierTypes;
-use Heystack\Ecommerce\Transaction\Traits\TransactionModifierStateTrait;
-use Heystack\Ecommerce\Transaction\Traits\TransactionModifierSerializeTrait;
-use Heystack\Ecommerce\Locale\LocaleService;
-
+use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Monolog\Logger;
-
-use Heystack\Core\State\StateableInterface;
-use Heystack\Core\State\State;
-use Heystack\Core\ViewableData\ViewableDataInterface;
-use Heystack\Core\Storage\StorableInterface;
-use Heystack\Core\Storage\Backends\SilverStripeOrm\Backend;
-use Heystack\Core\Storage\Traits\ParentReferenceTrait;
 
 /**
  * An implementation of the ShippingHandlerInterface specific to 'free' shipping cost calculation
@@ -38,23 +42,30 @@ use Heystack\Core\Storage\Traits\ParentReferenceTrait;
  * @author Glenn Bautista <glenn@heyday.co.nz>
  * @package Ecommerce-Shipping
  */
-class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \Serializable, ViewableDataInterface, StorableInterface, HasDataInterface, HasStateServiceInterface
+class ShippingHandler
+    implements
+        ShippingHandlerInterface,
+        StateableInterface,
+        \Serializable,
+        ViewableDataInterface,
+        StorableInterface,
+        HasDataInterface,
+        HasStateServiceInterface
 {
     use ShippingHandlerTrait;
     use TransactionModifierStateTrait;
     use TransactionModifierSerializeTrait;
     use ParentReferenceTrait;
+    use HasLocaleServiceTrait;
+    use HasCurrencyServiceTrait;
+    use HasEventServiceTrait;
+    use HasStateServiceTrait;
+    use HasLoggerServiceTrait;
 
     /**
      * Holds the key used for storing state
      */
     const IDENTIFIER = 'shipping';
-
-    /**
-     * Holds the locale service object
-     * @var \Heystack\Ecommerce\Locale\LocaleService
-     */
-    protected $localeService;
 
     /**
      * Holds the name of the country class to be used
@@ -63,35 +74,32 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
     protected $countryClass;
 
     /**
-     * Holds the event dispatcher service object
-     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+     * @var \SebastianBergmann\Money\Money
      */
-    protected $eventService;
+    protected $total;
 
     /**
-     * Holds the state service object
-     * @var \Heystack\Core\State\State
-     */
-    protected $stateService;
-
-    /**
-     * Holds the monolog logger service object
-     * @var \Monolog\Logger
-     */
-    protected $monologService;
-
-    /**
+     * @param LocaleService $localeService
+     * @param EventDispatcherInterface $eventService
+     * @param State $stateService
+     * @param CurrencyServiceInterface $currencyService
+     * @param LoggerInterface $loggerService
      * Creates the ShippingHandler object
-     * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventService
-     * @param \Heystack\Core\State\State                        $stateService
-     * @param \Monolog\Logger                                             $monologService
      */
-    public function __construct(LocaleService $localeService, EventDispatcherInterface $eventService, State $stateService, Logger $monologService = null)
+    public function __construct(
+        LocaleService $localeService,
+        EventDispatcherInterface $eventService,
+        State $stateService,
+        CurrencyServiceInterface $currencyService,
+        LoggerInterface $loggerService = null
+    )
     {
         $this->localeService = $localeService;
         $this->eventService = $eventService;
         $this->stateService = $stateService;
-        $this->monologService = $monologService;
+        $this->loggerService = $loggerService;
+        $this->currencyService = $currencyService;
+        $this->total = $this->currencyService->getZeroMoney();
     }
 
     /**
@@ -157,17 +165,16 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
     /**
      * Overrides the magic setter function for the Country field. Uses the cache for
      * retrieval and storage of the Country object
-     * @param string $identifier
+     * @param IdentifierInterface $identifier
      */
-    public function setCountry($identifier)
+    public function setCountry(IdentifierInterface $identifier)
     {
         $this->localeService->setActiveCountry($identifier);
     }
 
     /**
      * Retrive the country object from the cache
-     * @param  type                                                                  $identifier
-     * @return \Heystack\Shipping\CountryBased\Interfaces\CountryInterface
+     * @return \Heystack\Ecommerce\Locale\Interfaces\CountryInterface
      */
     public function getCountry()
     {
@@ -188,9 +195,7 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
      */
     public function getTotal()
     {
-        $total = 0;
-
-        return $total;
+        return $this->total;
     }
 
     /**
@@ -202,9 +207,11 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
         return TransactionModifierTypes::NEUTRAL;
     }
 
+    /**
+     * @return array
+     */
     public function getStorableData()
     {
-
         return [
             'id' => 'ShippingHandler',
             'parent' => true,
@@ -235,14 +242,14 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
                 'BillingPhone' => $this->BillingPhone,
            ]
        ];
-
     }
 
+    /**
+     * @return string
+     */
     public function getStorableIdentifier()
     {
-
         return self::IDENTIFIER;
-
     }
 
     /**
@@ -251,11 +258,12 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
      */
     public function getSchemaName()
     {
-
         return 'Shipping';
-
     }
 
+    /**
+     * @return array
+     */
     public function getStorableBackendIdentifiers()
     {
         return [
@@ -264,11 +272,14 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
     }
 
     /**
-     * @param array $data
+     * @param $data
+     * @return mixed|void
      */
     public function setData($data)
     {
-        $this->data = $data;
+        if (is_array($data)) {
+            list($this->data, $this->total) = $data;
+        }
     }
 
     /**
@@ -276,20 +287,6 @@ class ShippingHandler implements ShippingHandlerInterface, StateableInterface, \
      */
     public function getData()
     {
-        return $this->data;
+        return [$this->data, $this->total];
     }
-
-    /**
-     * @param State $stateService
-     */
-    public function setStateService(State $stateService)
-    {
-        $this->stateService = $stateService;
-    }
-
-    public function getStateService()
-    {
-        return $this->stateService;
-    }
-
 }

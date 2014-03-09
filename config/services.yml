@@ -5,16 +5,13 @@ parameters:
   shipping_service_subscriber.class: Heystack\Shipping\Types\CountryBased\Subscriber
 
 services:
-  
   shipping_service:
     class: %shipping_service.class%
     arguments: [ @locale_service, @event_dispatcher, @state ]
-    calls:
-      - [ restoreState ]
     tags:
-      - { name: ss_orm_backend.data_provider }
       - { name: transaction.modifier }
       - { name: has.logger }
+      - { name: state.restore }
       
   shipping_input_processor:
     class: %shipping_input_processor.class%
@@ -29,7 +26,7 @@ services:
       
   shipping_service_subscriber:
     class: %shipping_service_subscriber.class%
-    arguments: [ @event_dispatcher, @shipping_service, @storage ]
+    arguments: [ @event_dispatcher, @shipping_service, @storage, @state ]
     tags:
       - { name: event_dispatcher.subscriber }
       

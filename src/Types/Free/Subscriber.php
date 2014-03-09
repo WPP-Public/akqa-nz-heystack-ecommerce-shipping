@@ -10,6 +10,9 @@
  */
 namespace Heystack\Shipping\Types\Free;
 
+use Heystack\Core\State\State;
+use Heystack\Core\Traits\HasEventServiceTrait;
+use Heystack\Core\Traits\HasStateServiceTrait;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -31,11 +34,8 @@ use Heystack\Shipping\Events;
  */
 class Subscriber implements EventSubscriberInterface
 {
-    /**
-     * Holds the Event Dispatcher Service
-     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
-     */
-    protected $eventService;
+    use HasEventServiceTrait;
+    use HasStateServiceTrait;
 
     /**
      * Holds the ShippingHandler Service
@@ -51,15 +51,22 @@ class Subscriber implements EventSubscriberInterface
 
     /**
      * Creates the ShippingHandler Subscriber object
-     * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface      $eventService
+     * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventService
      * @param \Heystack\Shipping\Interfaces\ShippingHandlerInterface $shippingService
-     * @param \Heystack\Core\Storage\Storage                         $storageService
+     * @param \Heystack\Core\Storage\Storage $storageService
+     * @param \Heystack\Core\State\State $stateService
      */
-    public function __construct(EventDispatcherInterface $eventService, ShippingHandlerInterface $shippingService,  Storage $storageService)
+    public function __construct(
+        EventDispatcherInterface $eventService,
+        ShippingHandlerInterface $shippingService,
+        Storage $storageService,
+        State $stateService
+    )
     {
         $this->eventService = $eventService;
         $this->shippingService = $shippingService;
         $this->storageService = $storageService;
+        $this->stateService = $stateService;
     }
 
     /**
@@ -80,12 +87,9 @@ class Subscriber implements EventSubscriberInterface
      */
     public function onTransactionStored(StorageEvent $event)
     {
-
         $this->shippingService->setParentReference($event->getParentReference());
-
         $this->storageService->process($this->shippingService);
-
         $this->eventService->dispatch(Events::STORED);
+        $this->stateService->removeByKey(ShippingHandler::IDENTIFIER);
     }
-
 }
