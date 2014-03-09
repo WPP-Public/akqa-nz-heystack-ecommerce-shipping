@@ -32,12 +32,14 @@ services:
       
   shippinghandler_schema:
     class: %yaml_data_object_schema.class%
-    arguments: [ ecommerce-shipping/config/storage/shippinghandler.yml, @state_global ]
+    arguments: [ ecommerce-shipping/config/storage/shippinghandler.yml ]
     tags:
-      - { name: dataobject_generator.schema }
+      - { name: schema }
+      - { name: autoinject, arguments: true }
 
   transaction_shippinghandler_schema:
     class: %yaml_data_object_schema.class%
-    arguments: [ ecommerce-shipping/config/storage/transaction_shippinghandler.yml, @state_global ]
+    arguments: [ ecommerce-shipping/config/storage/transaction_shippinghandler.yml ]
     tags:
-      - { name: dataobject_generator.schema }
+      - { name: schema }
+      - { name: autoinject, arguments: true }
