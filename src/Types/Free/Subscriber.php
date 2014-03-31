@@ -11,18 +11,17 @@
 namespace Heystack\Shipping\Types\Free;
 
 use Heystack\Core\State\State;
+use Heystack\Core\Storage\Backends\SilverStripeOrm\Backend;
+use Heystack\Core\Storage\Event as StorageEvent;
+use Heystack\Core\Storage\Storage;
 use Heystack\Core\Traits\HasEventServiceTrait;
 use Heystack\Core\Traits\HasStateServiceTrait;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-
 use Heystack\Ecommerce\Transaction\Events as TransactionEvents;
-use Heystack\Shipping\Interfaces\ShippingHandlerInterface;
-use Heystack\Core\Storage\Storage;
-use Heystack\Core\Storage\Event as StorageEvent;
-
-use Heystack\Core\Storage\Backends\SilverStripeOrm\Backend;
 use Heystack\Shipping\Events;
+use Heystack\Shipping\Interfaces\ShippingHandlerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
  * Handles both subscribing to events and acting on those events needed for ShippingHandler to work properly

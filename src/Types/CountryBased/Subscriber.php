@@ -1,13 +1,5 @@
 <?php
-/**
- * This file is part of the Ecommerce-Shipping package
- *
- * @package Ecommerce-Shipping
- */
 
-/**
- * CountryBased namespace
- */
 namespace Heystack\Shipping\Types\CountryBased;
 
 use Heystack\Core\State\State;
@@ -16,8 +8,6 @@ use Heystack\Core\Storage\Event as StorageEvent;
 use Heystack\Core\Storage\Storage;
 use Heystack\Core\Traits\HasEventServiceTrait;
 use Heystack\Core\Traits\HasStateServiceTrait;
-use Heystack\Ecommerce\Currency\Events as CurrencyEvents;
-use Heystack\Ecommerce\Locale\Events as LocaleEvents;
 use Heystack\Ecommerce\Transaction\Events as TransactionEvents;
 use Heystack\Shipping\Events;
 use Heystack\Shipping\Interfaces\ShippingHandlerInterface;

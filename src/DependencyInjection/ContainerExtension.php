@@ -10,12 +10,12 @@
  */
 namespace Heystack\Shipping\DependencyInjection;
 
+use Heystack\Shipping\Config\ContainerConfig;
+use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
-use Heystack\Shipping\Config\ContainerConfig;
-use Symfony\Component\Config\Definition\Processor;
 
 
 /**
