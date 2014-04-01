@@ -56,19 +56,8 @@ class Subscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            CurrencyEvents::CHANGED        => ['onTotalUpdated', 0],
-            LocaleEvents::CHANGED          => ['onTotalUpdated', 0],
-            Backend::IDENTIFIER . '.' . TransactionEvents::STORED      => ['onTransactionStored', 0]
+            sprintf('%s.%s', Backend::IDENTIFIER, TransactionEvents::STORED) => ['onTransactionStored', 0]
         ];
-    }
-
-    /**
-     * Called after the ShippingHandler's total is updated.
-     * Tells the transaction to update its total.
-     */
-    public function onTotalUpdated()
-    {
-        $this->eventService->dispatch(TransactionEvents::UPDATE);
     }
 
     /**
