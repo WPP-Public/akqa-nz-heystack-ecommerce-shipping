@@ -30,14 +30,14 @@ services:
     tags:
       - { name: event_dispatcher.subscriber }
       
-  shippinghandler_schema:
+  shipping_handler_schema:
     class: %yaml_data_object_schema.class%
     arguments: [ ecommerce-shipping/config/storage/shippinghandler.yml ]
     tags:
       - { name: schema }
       - { name: autoinject, arguments: true }
 
-  transaction_shippinghandler_schema:
+  transaction_shipping_handler_schema:
     class: %yaml_data_object_schema.class%
     arguments: [ ecommerce-shipping/config/storage/transaction_shippinghandler.yml ]
     tags:
