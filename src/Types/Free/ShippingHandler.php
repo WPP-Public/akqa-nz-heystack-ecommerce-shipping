@@ -227,7 +227,7 @@ class ShippingHandler
                 'Surname' => $this->Surname,
                 'Email' => $this->Email,
                 'Phone' => $this->Phone,
-                'Total' => $this->getTotal(),
+                'Total' => \Heystack\Ecommerce\convertMoneyToString($this->getTotal()),
                 
                 'BillingAsShipping' => $this->BillingAsShipping,
                 'BillingAddressLine1' => $this->BillingAddressLine1,
