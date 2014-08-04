@@ -16,7 +16,8 @@ trait HasShippingHandlerTrait
     protected $shippingHandler;
 
     /**
-     * @param mixed $shippingHandler
+     * @param \Heystack\Shipping\Interfaces\ShippingHandlerInterface $shippingHandler
+     * @return void
      */
     public function setShippingHandler(ShippingHandlerInterface $shippingHandler)
     {

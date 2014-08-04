@@ -10,6 +10,7 @@
  */
 namespace Heystack\Shipping\Types\Free;
 
+use Heystack\Core\EventDispatcher;
 use Heystack\Core\State\State;
 use Heystack\Core\Storage\Backends\SilverStripeOrm\Backend;
 use Heystack\Core\Storage\Event as StorageEvent;
@@ -83,8 +84,11 @@ class Subscriber implements EventSubscriberInterface
      * Called after the Transaction is stored.
      * Tells the storage service to store all the information held in the ShippingHandler
      * @param \Heystack\Core\Storage\Event $event
+     * @param string $eventName
+     * @param \Heystack\Core\EventDispatcher $dispatcher
+     * @return void
      */
-    public function onTransactionStored(StorageEvent $event)
+    public function onTransactionStored(StorageEvent $event, $eventName, EventDispatcher $dispatcher)
     {
         $this->shippingService->setParentReference($event->getParentReference());
         $this->storageService->process($this->shippingService);

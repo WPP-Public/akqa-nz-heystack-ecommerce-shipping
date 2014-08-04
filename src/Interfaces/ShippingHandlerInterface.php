@@ -32,6 +32,7 @@ interface ShippingHandlerInterface
 {
     /**
      * Defines what methods the implementing class implements dynamically through __get and __set
+     * @return array
      */
     public function getDynamicMethods();
 
@@ -39,12 +40,14 @@ interface ShippingHandlerInterface
      * Overrides the magic setter function for the Country field. Uses the LocaleService for
      * retrieval and storage of the Country object
      * @param \Heystack\Core\Identifier\IdentifierInterface $identifier
+     * @return void
      */
     public function setCountry(IdentifierInterface $identifier);
 
     /**
      * Overrides the magic getter function for the Country field. Uses the Locale Service for
      * retrieval and storage of the Country object
+     * @return \Heystack\Ecommerce\Locale\Interfaces\CountryInterface
      */
     public function getCountry();
 }

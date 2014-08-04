@@ -71,10 +71,10 @@ class ShippingHandler
 
     /**
      * Creates the ShippingHandler object
-     * @param LocaleServiceInterface $localeService
-     * @param EventDispatcherInterface $eventService
-     * @param State $stateService
-     * @param CurrencyServiceInterface $currencyService
+     * @param \Heystack\Ecommerce\Locale\Interfaces\LocaleServiceInterface $localeService
+     * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventService
+     * @param \Heystack\Core\State\State $stateService
+     * @param \Heystack\Ecommerce\Currency\Interfaces\CurrencyServiceInterface $currencyService
      */
     public function __construct(
         LocaleServiceInterface $localeService,
@@ -120,6 +120,9 @@ class ShippingHandler
         ];
     }
 
+    /**
+     * @return array
+     */
     public function getCastings()
     {
         return [
@@ -152,6 +155,7 @@ class ShippingHandler
      * Overrides the magic setter function for the Country field. Uses the cache for
      * retrieval and storage of the Country object
      * @param \Heystack\Core\Identifier\IdentifierInterface $identifier
+     * @return void
      */
     public function setCountry(IdentifierInterface $identifier)
     {
@@ -241,6 +245,9 @@ class ShippingHandler
 
     }
 
+    /**
+     * @return string
+     */
     public function getStorableIdentifier()
     {
         return self::IDENTIFIER;

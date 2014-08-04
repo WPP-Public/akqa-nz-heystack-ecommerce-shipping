@@ -10,14 +10,13 @@
  */
 namespace Heystack\Shipping\Types\Free;
 
+use Heystack\Core\EventDispatcher;
 use Heystack\Core\Identifier\Identifier;
 use Heystack\Core\Identifier\IdentifierInterface;
 use Heystack\Core\Interfaces\HasDataInterface;
 use Heystack\Core\Interfaces\HasStateServiceInterface;
 use Heystack\Core\State\State;
-use Heystack\Core\State\StateableInterface;
 use Heystack\Core\Storage\Backends\SilverStripeOrm\Backend;
-use Heystack\Core\Storage\StorableInterface;
 use Heystack\Core\Storage\Traits\ParentReferenceTrait;
 use Heystack\Core\Traits\HasEventServiceTrait;
 use Heystack\Core\Traits\HasLoggerServiceTrait;
@@ -33,7 +32,6 @@ use Heystack\Ecommerce\Transaction\TransactionModifierTypes;
 use Heystack\Shipping\Interfaces\ShippingHandlerInterface;
 use Heystack\Shipping\Traits\ShippingHandlerTrait;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * An implementation of the ShippingHandlerInterface specific to 'free' shipping cost calculation
@@ -45,10 +43,8 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 class ShippingHandler
     implements
         ShippingHandlerInterface,
-        StateableInterface,
         \Serializable,
         ViewableDataInterface,
-        StorableInterface,
         HasDataInterface,
         HasStateServiceInterface
 {
@@ -79,16 +75,16 @@ class ShippingHandler
     protected $total;
 
     /**
-     * @param LocaleService $localeService
-     * @param EventDispatcherInterface $eventService
-     * @param State $stateService
-     * @param CurrencyServiceInterface $currencyService
-     * @param LoggerInterface $loggerService
+     * @param \Heystack\Ecommerce\Locale\LocaleService $localeService
+     * @param \Heystack\Core\EventDispatcher $eventService
+     * @param \Heystack\Core\State\State $stateService
+     * @param \Heystack\Ecommerce\Currency\Interfaces\CurrencyServiceInterface $currencyService
+     * @param \Psr\Log\LoggerInterface $loggerService
      * Creates the ShippingHandler object
      */
     public function __construct(
         LocaleService $localeService,
-        EventDispatcherInterface $eventService,
+        EventDispatcher $eventService,
         State $stateService,
         CurrencyServiceInterface $currencyService,
         LoggerInterface $loggerService = null
@@ -134,6 +130,9 @@ class ShippingHandler
         ];
     }
 
+    /**
+     * @return array
+     */
     public function getCastings()
     {
         return [
@@ -166,6 +165,7 @@ class ShippingHandler
      * Overrides the magic setter function for the Country field. Uses the cache for
      * retrieval and storage of the Country object
      * @param IdentifierInterface $identifier
+     * @return void
      */
     public function setCountry(IdentifierInterface $identifier)
     {
@@ -192,6 +192,7 @@ class ShippingHandler
 
     /**
      * Returns the total value of the TransactionModifier for use in the Transaction
+     * @return \SebastianBergmann\Money\Money
      */
     public function getTotal()
     {
@@ -201,6 +202,7 @@ class ShippingHandler
     /**
      * Indicates the type of amount the modifier will return
      * Must return a constant from TransactionModifierTypes
+     * @return string
      */
     public function getType()
     {
@@ -272,8 +274,8 @@ class ShippingHandler
     }
 
     /**
-     * @param $data
-     * @return mixed|void
+     * @param mixed $data
+     * @return void
      */
     public function setData($data)
     {

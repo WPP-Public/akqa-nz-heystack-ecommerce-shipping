@@ -35,9 +35,10 @@ trait ShippingHandlerTrait
     /**
      * Magic setter function that uses the data array to store a property's data.
      *
-     * @param  string     $name
-     * @param  mixed       $value
+     * @param  string $name
+     * @param  mixed $value
      * @throws \Exception
+     * @return void
      */
     public function __set($name, $value)
     {
@@ -71,7 +72,7 @@ trait ShippingHandlerTrait
     /**
      * Magic getter function that returns a property from the data array
      * @param  string $name
-     * @return mixed
+     * @return mixed|null
      * @throws \Exception
      */
     public function __get($name)

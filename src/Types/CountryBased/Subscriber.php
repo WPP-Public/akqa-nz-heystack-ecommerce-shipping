@@ -2,6 +2,7 @@
 
 namespace Heystack\Shipping\Types\CountryBased;
 
+use Heystack\Core\EventDispatcher;
 use Heystack\Core\State\State;
 use Heystack\Core\Storage\Backends\SilverStripeOrm\Backend;
 use Heystack\Core\Storage\Event as StorageEvent;
@@ -12,7 +13,6 @@ use Heystack\Ecommerce\Transaction\Events as TransactionEvents;
 use Heystack\Shipping\Events;
 use Heystack\Shipping\Interfaces\ShippingHandlerInterface;
 use Heystack\Shipping\Traits\HasShippingHandlerTrait;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -31,13 +31,13 @@ class Subscriber implements EventSubscriberInterface
 
     /**
      * Creates the ShippingHandler Subscriber object
-     * @param EventDispatcherInterface $eventService
-     * @param ShippingHandlerInterface $shippingHandler
-     * @param Storage $storageService
+     * @param \Heystack\Core\EventDispatcher $eventService
+     * @param \Heystack\Shipping\Interfaces\ShippingHandlerInterface $shippingHandler
+     * @param \Heystack\Core\Storage\Storage $storageService
      * @param \Heystack\Core\State\State $stateService
      */
     public function __construct(
-        EventDispatcherInterface $eventService,
+        EventDispatcher $eventService,
         ShippingHandlerInterface $shippingHandler,
         Storage $storageService,
         State $stateService
@@ -64,6 +64,7 @@ class Subscriber implements EventSubscriberInterface
      * Called after the Transaction is stored.
      * Tells the storage service to store all the information held in the ShippingHandler
      * @param \Heystack\Core\Storage\Event $event
+     * @return void
      */
     public function onTransactionStored(StorageEvent $event)
     {
