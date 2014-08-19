@@ -37,7 +37,7 @@ class Processor implements ProcessorInterface
     /**
      * Method used to determine how to handle the output based on the InputProcessor's result
      * @param  \Controller      $controller
-     * @param  type             $result
+     * @param  mixed|void       $result
      * @return \SS_HTTPResponse
      */
     public function process(\Controller $controller, $result = null)
