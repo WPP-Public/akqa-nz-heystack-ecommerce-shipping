@@ -10,7 +10,7 @@ services:
     arguments: [ @locale_service, @event_dispatcher, @state ]
     tags:
       - { name: transaction.modifier }
-      - { name: has.logger }
+      - { name: autoinject }
       - { name: state.restore }
       
   shipping_input_processor:
